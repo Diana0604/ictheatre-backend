@@ -1,19 +1,19 @@
-import { createPool, Pool } from 'mysql';
+import { Connection, createConnection, Query } from 'mysql';
 import config from '../config/config.index';
 
-let pool: Pool;
+let connection: Connection;
 
 /**
  * generates pool connection to be used throughout the app
  */
 export const init = () => {
   try {
-    pool = createPool(config.mariadbConfig);
+    connection = createConnection(config.mariadbConfig);
 
-    console.debug('MySql Adapter Pool generated successfully');
+    console.debug('MySql created connection succesfully');
   } catch (error) {
     console.error('[mysql.connector][init][Error]: ', error);
-    throw new Error('failed to initialized pool');
+    throw new Error('failed to initialize connection');
   }
 };
 
@@ -21,22 +21,32 @@ export const init = () => {
  * executes SQL queries in MySQL db
  *
  * @param {string} query - provide a valid SQL query
- * @param {string[] | Object} params - provide the parameterized values used
  * in the query
  */
-export const execute = <T>(query: string, params: string[] | Object): Promise<T> => {
+export const execute = <T>(query: Query): Promise<T> => {
   try {
-    if (!pool) throw new Error('Pool was not created. Ensure pool is created when running the app.');
-
     return new Promise<T>((resolve, reject) => {
-      pool.query(query, params, (error, results) => {
+      connection.query(query, (error, results, _fields) => {
         if (error) reject(error);
-        else resolve(results);
-      });
-    });
-
+        else {
+          resolve(results)
+        }
+      })
+    })
   } catch (error) {
     console.error('[mysql.connector][execute][Error]: ', error);
     throw new Error('failed to execute MySQL query');
+  }
+}
+
+/**
+ * Disconnect from the database
+ */
+export const disconnect = () => {
+  try {
+    connection.end();
+  } catch(error) {
+    console.log('MySQL error when trying to disconnect')
+    console.log(error)
   }
 }
