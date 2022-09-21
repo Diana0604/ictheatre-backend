@@ -1,13 +1,10 @@
-import { init, disconnect, execute } from './src/mariadb/mariadb.index'
+import { init as initDatabase, disconnect as disconnectDatabase, execute as executeDBQuery } from './src/mariadb/mariadb.index'
 
-if (init()) {
-    console.log('project is running')
+if (!initDatabase()) throw new Error('Could not load database')
 
-    execute('SELECT 1').then(() => {
-        console.log('success!')
-        disconnect()
-    })
-}
+console.log('project is running')
 
-
-
+executeDBQuery('SELECT 1').then(() => {
+    console.log('success!')
+    disconnectDatabase()
+})
