@@ -5,15 +5,20 @@ class User {
     isAdmin: boolean
     isActor: boolean
 
-    constructor() {
-        this.username = ""
-        this.password = ""
+    constructor(username: string, password: string) {
+        this.username = username
+        this.password = password
         this.isAdmin = false
         this.isActor = false
     }
 }
 
 class AdminUser extends User {
+
+    resetShow = () => {
+        console.log('show is resetting')
+    }
+
     constructor() {
         super()
         this.isAdmin = true
