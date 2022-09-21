@@ -1,10 +1,13 @@
-import { init, disconnect } from './src/mariadb/mariadb.index'
+import { init, disconnect, execute } from './src/mariadb/mariadb.index'
 
-init()
+if (init()) {
+    console.log('project is running')
 
-console.log('project is running')
+    execute('SELECT 1').then(() => {
+        console.log('success!')
+        disconnect()
+    })
+}
 
-setTimeout(() => {
-    console.log('on timeout')
-    disconnect()
-}, 20000)
+
+

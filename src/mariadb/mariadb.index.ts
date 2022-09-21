@@ -1,4 +1,4 @@
-import { Connection, createConnection, Query } from 'mysql';
+import { Connection, createConnection } from 'mysql';
 import config from '../config/config.index';
 
 let connection: Connection;
@@ -9,8 +9,8 @@ let connection: Connection;
 export const init = () => {
   try {
     connection = createConnection(config.mariadbConfig);
-
     console.debug('MySql created connection succesfully');
+    return true
   } catch (error) {
     console.error('[mysql.connector][init][Error]: ', error);
     throw new Error('failed to initialize connection');
@@ -23,7 +23,7 @@ export const init = () => {
  * @param {string} query - provide a valid SQL query
  * in the query
  */
-export const execute = <T>(query: Query): Promise<T> => {
+export const execute = <T>(query: string): Promise<T> => {
   try {
     return new Promise<T>((resolve, reject) => {
       connection.query(query, (error, results, _fields) => {
@@ -45,7 +45,7 @@ export const execute = <T>(query: Query): Promise<T> => {
 export const disconnect = () => {
   try {
     connection.end();
-  } catch(error) {
+  } catch (error) {
     console.log('MySQL error when trying to disconnect')
     console.log(error)
   }
