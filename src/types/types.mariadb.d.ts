@@ -7,5 +7,4 @@ export interface IDatabaseConfig {
     options: {
         encrypt: true
     }
-
 }
