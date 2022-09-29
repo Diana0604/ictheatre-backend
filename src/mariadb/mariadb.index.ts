@@ -1,5 +1,6 @@
 import { Connection, createConnection } from 'mysql';
 import config from '../config/config.index';
+import { createTableCommand, insertElementCommand } from './mariadb.helpers';
 
 let connection: Connection;
 
@@ -23,7 +24,7 @@ export const init = () => {
  * @param {string} query - provide a valid SQL query
  * in the query
  */
-export const execute = <T>(query: string): Promise<T> => {
+const execute = <T>(query: string): Promise<T> => {
   try {
     return new Promise<T>((resolve, reject) => {
       connection.query(query, (error, results, _fields) => {
@@ -49,4 +50,26 @@ export const disconnect = () => {
     console.log('MySQL error when trying to disconnect')
     console.log(error)
   }
+}
+
+/**
+ * Insert object to database into type of it's class name
+ * @param obj object to be inserted
+ */
+export const insertElement = (obj: any) => {
+  let createCommand = createTableCommand(obj)
+
+  execute(createCommand).then(() => {
+
+    let insertCommand = insertElementCommand(obj)
+
+    execute(insertCommand).then(() => {
+      console.log('element inserted')
+    }, () => {
+      throw new Error('could not inser element')
+    })
+
+  }, () => {
+    throw new Error('could not create table')
+  })
 }

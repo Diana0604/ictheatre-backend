@@ -19,15 +19,15 @@ class AdminUser extends User {
         console.log('show is resetting')
     }
 
-    constructor() {
-        super()
+    constructor(username: string, password: string) {
+        super(username, password)
         this.isAdmin = true
     }
 }
 
 class ActorUser extends User {
-    constructor() {
-        super()
+    constructor(username: string, password: string) {
+        super(username, password)
         this.isActor = true
     }
 }
