@@ -3,22 +3,24 @@ let fakeId = 0
 interface ICompanyProperties {
     name: string,
     description: string,
-    pricePerShare: number,
-    updatePrice: (seconds: number) => void
+    initPricePerShare: number,
+    finalPricePerShare: number
 }
 
 class Company {
     id: number
     name: string
     description: string
-    pricePerShare: number
-    updatePrice: (seconds: number) => void
+    initPricePerShare: number
+    currentPricePerShare: number
+    finalPricePerShare: number
 
     constructor(props: ICompanyProperties) {
         this.name = props.name
         this.description = props.description
-        this.pricePerShare = props.pricePerShare
-        this.updatePrice = props.updatePrice
+        this.initPricePerShare = props.initPricePerShare
+        this.currentPricePerShare = props.initPricePerShare
+        this.finalPricePerShare = props.finalPricePerShare
         this.id = fakeId
         fakeId++
     }
