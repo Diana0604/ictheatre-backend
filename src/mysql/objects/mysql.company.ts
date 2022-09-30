@@ -1,13 +1,19 @@
 let fakeId = 0
 
+/**
+ * Properties to be passed in company constructor
+ */
 interface ICompanyProperties {
     name: string,
     description: string,
-    initPricePerShare: number,
-    finalPricePerShare: number
+    initPricePerShare: number, //price at init of show
+    finalPricePerShare: number //price at end of show
 }
 
-export default class Company {
+/**
+ * Company class
+ */
+export class Company {
     id: number
     name: string
     description: string
@@ -26,6 +32,9 @@ export default class Company {
     }
 }
 
+/**
+ * Player company class. Not sure what more it will have from Player.
+ */
 class PlayerCompany extends Company {
 
     constructor(basicProps: ICompanyProperties) {

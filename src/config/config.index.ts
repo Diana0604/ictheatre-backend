@@ -1,7 +1,7 @@
 import { IConfig } from "../types/types.config"
 
 const config: IConfig = {
-    mariadbConfig: {
+    mysqlConfig: {
         connectionLimit: 5,
         user: "user", //default is sa
         password: "mypassword",

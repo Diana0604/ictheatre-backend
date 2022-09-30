@@ -1,15 +1,15 @@
 import { Connection, createConnection } from 'mysql';
 import config from '../config/config.index';
-import { createTableCommand, insertElementCommand } from './mariadb.helpers';
+import { createTableCommand, insertElementCommand } from './mysql.helpers';
 
 let connection: Connection;
 
 /**
- * generates pool connection to be used throughout the app
+ * generates database connection to be used throughout the app, using configuration in src/config/config.index.ts
  */
 export const init = () => {
   try {
-    connection = createConnection(config.mariadbConfig);
+    connection = createConnection(config.mysqlConfig);
     console.debug('MySql created connection succesfully');
     return true
   } catch (error) {
@@ -41,7 +41,7 @@ const execute = <T>(query: string): Promise<T> => {
 }
 
 /**
- * Disconnect from the database
+ * Disconnect from MySql
  */
 export const disconnect = () => {
   try {
@@ -54,20 +54,24 @@ export const disconnect = () => {
 
 /**
  * Insert object to database into type of it's class name
+ * We transform:
+ * 1. Class Name -> Table Name
+ * 2. Class Properties -> Table Columns
+ * 3. Add given object to class
+ * WARNING: currently only accepting strings and numbers (which are set as double)
  * @param obj object to be inserted
  */
 export const insertElement = async (obj: any) => {
-  //1st make sure table exists
+  //create table if not exists
   const createCommand = createTableCommand(obj)
-
   try {
     await execute(createCommand)
   } catch (error) {
     throw error
   }
-  //2nd insert element
-  const insertCommand = insertElementCommand(obj)
 
+  //insert element
+  const insertCommand = insertElementCommand(obj)
   try {
     await execute(insertCommand)
   } catch (error) {
@@ -76,38 +80,28 @@ export const insertElement = async (obj: any) => {
 }
 
 /**
- * delete and rescreate database - to be executed at beginning of show
+ * delete and create emtpy database
  */
 export const restartDB = async () => {
   try {
-    await execute(`DROP DATABASE ${config.mariadbConfig.database}`)
-  } catch (error) {
-    throw error
-  }
-
-  try {
-    await execute(`CREATE DATABASE ${config.mariadbConfig.database}`)
-  } catch (error) {
-    throw error
-  }
-  try {
-    await execute(`use ${config.mariadbConfig.database};`)
+    //delete database
+    await execute(`DROP DATABASE ${config.mysqlConfig.database};`)
+    //create new database with same name
+    await execute(`CREATE DATABASE ${config.mysqlConfig.database};`)
+    //set newly created database as database to be used for all queries
+    await execute(`use ${config.mysqlConfig.database};`)
   } catch (error) {
     throw error
   }
 }
 
+/**
+ * Display name of all the tables that are set in our database
+ * TODO: will eventually display all content of all tables
+ */
 export const showAllTables = async () => {
   try {
-    console.log(await execute(`SHOW TABLES FROM ${config.mariadbConfig.database};`))
-  } catch (error) {
-    throw error
-  }
-}
-
-export const showAllDB = async () => {
-  try {
-    console.log(await execute(`SHOW DATABASES;`))
+    console.log(await execute(`SHOW TABLES FROM ${config.mysqlConfig.database};`))
   } catch (error) {
     throw error
   }
