@@ -1,3 +1,4 @@
 export interface IConfig {
-    mariadbConfig: IDatabaseConfig
+    mariadbConfig: IDatabaseConfig,
+    seedDB: boolean
 }

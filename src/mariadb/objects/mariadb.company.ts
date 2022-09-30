@@ -7,7 +7,7 @@ interface ICompanyProperties {
     finalPricePerShare: number
 }
 
-class Company {
+export default class Company {
     id: number
     name: string
     description: string

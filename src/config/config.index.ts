@@ -5,12 +5,13 @@ const config: IConfig = {
         connectionLimit: 5,
         user: "user", //default is sa
         password: "mypassword",
-        server: "localhost", // for local machine
+        host: "localhost", // for local machine
         database: "ictheatre", // name of database
         options: {
             encrypt: true
         }
-    }
+    },
+    seedDB: true //set to false if you don't want to seed the dab
 }
 
 export default config

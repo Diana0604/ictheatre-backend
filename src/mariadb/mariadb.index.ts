@@ -56,20 +56,59 @@ export const disconnect = () => {
  * Insert object to database into type of it's class name
  * @param obj object to be inserted
  */
-export const insertElement = (obj: any) => {
-  let createCommand = createTableCommand(obj)
+export const insertElement = async (obj: any) => {
+  //1st make sure table exists
+  const createCommand = createTableCommand(obj)
 
-  execute(createCommand).then(() => {
+  try {
+    await execute(createCommand)
+  } catch (error) {
+    throw error
+  }
+  //2nd insert element
+  const insertCommand = insertElementCommand(obj)
 
-    let insertCommand = insertElementCommand(obj)
+  try {
+    await execute(insertCommand)
+  } catch (error) {
+    throw error
+  }
+}
 
-    execute(insertCommand).then(() => {
-      console.log('element inserted')
-    }, () => {
-      throw new Error('could not inser element')
-    })
+/**
+ * delete and rescreate database - to be executed at beginning of show
+ */
+export const restartDB = async () => {
+  try {
+    await execute(`DROP DATABASE ${config.mariadbConfig.database}`)
+  } catch (error) {
+    throw error
+  }
 
-  }, () => {
-    throw new Error('could not create table')
-  })
+  try {
+    await execute(`CREATE DATABASE ${config.mariadbConfig.database}`)
+  } catch (error) {
+    throw error
+  }
+  try {
+    await execute(`use ${config.mariadbConfig.database};`)
+  } catch (error) {
+    throw error
+  }
+}
+
+export const showAllTables = async () => {
+  try {
+    console.log(await execute(`SHOW TABLES FROM ${config.mariadbConfig.database};`))
+  } catch (error) {
+    throw error
+  }
+}
+
+export const showAllDB = async () => {
+  try {
+    console.log(await execute(`SHOW DATABASES;`))
+  } catch (error) {
+    throw error
+  }
 }

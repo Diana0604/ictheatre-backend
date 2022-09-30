@@ -1,7 +1,12 @@
-import { init as initDatabase, disconnect as disconnectDatabase, insertElement } from './src/mariadb/mariadb.index'
+import { disconnect as disconnectDatabase } from './src/mariadb/mariadb.index'
+import init from './src/functions/init'
 
-if (!initDatabase()) throw new Error('Could not load database')
-
-console.log('project is running')
-    
-disconnectDatabase()
+//init database
+init().then(() => {
+    console.log('project is running')
+    disconnectDatabase()
+}, (error) => {
+    console.log('project did not start up correctly')
+    console.log(error)
+    disconnectDatabase()
+})
