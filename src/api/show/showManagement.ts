@@ -1,6 +1,6 @@
 import { getListOfTableEntries } from '../mysql/mysql.manager'
 import { Company } from '../mysql/objects/mysql.company'
-import { ICompanyProperties } from '../types/types.mysql'
+import { ICompanyProperties } from '../../types/types.mysql'
 
 //TODO -> time must come from database
 let time = 0

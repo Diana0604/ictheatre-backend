@@ -1,7 +1,7 @@
 //types
 import { Express } from 'express-serve-static-core'
 //app routs
-import mysql from './mysql/mysql.index'
+import mysql from './api/mysql/mysql.index'
 
 /**
  * Add all routes for express server

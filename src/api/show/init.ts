@@ -1,5 +1,5 @@
 import { insertElement, init as initDB, restartDB, showAllTables } from '../mysql/mysql.manager'
-import config from '../config/config.index'
+import config from '../../config/config.index'
 
 
 /**

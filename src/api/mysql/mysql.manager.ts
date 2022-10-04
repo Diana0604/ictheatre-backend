@@ -3,10 +3,10 @@ import { Connection, createConnection } from 'mysql'
 import { createTableCommand, insertElementCommand } from './mysql.helpers'
 import { Request, Response } from 'express'
 //classes
-import { Company } from '../mysql/objects/mysql.company'
+import { Company } from './objects/mysql.company'
 //config and fixtures
-import config from '../config/config.index'
-import companies from '../fixtures/companies'
+import config from '../../config/config.index'
+import companies from '../../fixtures/companies'
 
 let connection: Connection;
 
