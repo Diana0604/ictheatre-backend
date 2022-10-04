@@ -1,22 +1,24 @@
 import { disconnect as disconnectDatabase } from './src/mysql/mysql.index'
 import init from './src/functions/init'
 import { playShow } from './src/functions/showManagement'
+import express from 'express'
+
+const app = express()
 
 //init database
 init().then(() => {
-    console.log('init successful')
-    //database is connected, show is ready to go
-    //play will start it from whatever point we stopped it last
-    playShow().then(null, (error) => {
-        //something went wrong during the show -> report and go to finally
-        console.log('something went wrong during the show')
-        console.log(error)
-    })
+    console.log('database is connected, show is ready to go')
 }, (error) => {
-    //something when wrong at init -> report and go to finally
+    //something went wrong at init
     console.log('init failure')
     console.log(error)
-}).finally(() => {
-    //no matter what, disconnect from database at end
-    disconnectDatabase()
+})
+
+app.get('/', function (req, res) {
+    res.send('Hello World')
+})
+
+//to make requests from local network -> raspberrypi:3000
+app.listen(3000, () => {
+    console.log('listening on port 3000')
 })
