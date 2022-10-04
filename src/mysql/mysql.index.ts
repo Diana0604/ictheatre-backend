@@ -106,3 +106,22 @@ export const showAllTables = async () => {
     throw error
   }
 }
+
+/**
+ * Given the name of a table, return all objects that are in the database
+ * @param tableName name of table
+ * @returns list of objects obtained from table
+ * @throw error if table name does not exist in database
+ */
+export const getListOfTableEntries = async(tableName: string) => {
+  try {
+    const tableArray = await execute(`SELECT * from ${tableName};`) as Array<unknown>
+    let newArray = []
+    for(const element of tableArray) {
+      newArray.push(element)
+    }
+    return newArray
+  } catch(error) {
+    throw error
+  }
+}

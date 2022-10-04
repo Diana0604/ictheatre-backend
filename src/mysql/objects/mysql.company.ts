@@ -1,14 +1,6 @@
-let fakeId = 0
+import { ICompanyProperties } from "../../types/types.mysql"
 
-/**
- * Properties to be passed in company constructor
- */
-interface ICompanyProperties {
-    name: string,
-    description: string,
-    initPricePerShare: number, //price at init of show
-    finalPricePerShare: number //price at end of show
-}
+let fakeId = 0
 
 /**
  * Company class

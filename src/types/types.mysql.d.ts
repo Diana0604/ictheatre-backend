@@ -17,3 +17,13 @@ export interface IDatabaseConfig {
         encrypt: true
     }
 }
+
+/**
+ * Properties to be passed in company constructor
+ */
+ export interface ICompanyProperties {
+    name: string,
+    description: string,
+    initPricePerShare: number, //price at init of show
+    finalPricePerShare: number //price at end of show
+}
