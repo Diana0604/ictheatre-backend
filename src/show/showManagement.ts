@@ -1,4 +1,4 @@
-import { getListOfTableEntries } from '../mysql/mysql.index'
+import { getListOfTableEntries } from '../mysql/mysql.manager'
 import { Company } from '../mysql/objects/mysql.company'
 import { ICompanyProperties } from '../types/types.mysql'
 

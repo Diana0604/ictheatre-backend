@@ -1,5 +1,5 @@
 import companies from '../fixtures/companies'
-import { insertElement, init as initDB, restartDB, showAllTables } from '../mysql/mysql.index'
+import { insertElement, init as initDB, restartDB, showAllTables } from '../mysql/mysql.manager'
 import config from '../config/config.index'
 
 import { Company } from '../mysql/objects/mysql.company'
@@ -10,14 +10,6 @@ import { Company } from '../mysql/objects/mysql.company'
  */
 export default async () => {
     if (!initDB()) throw Error('Could not load database')
-
-    if (config.seedDB) {
-        try {
-            await seedDB()
-        } catch (error) {
-            throw error
-        }
-    }
 }
 
 /**

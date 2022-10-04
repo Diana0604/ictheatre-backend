@@ -1,6 +1,6 @@
-import { disconnect as disconnectDatabase } from './src/mysql/mysql.index'
-import init from './src/functions/init'
-import { playShow } from './src/functions/showManagement'
+import { disconnect as disconnectDatabase } from './src/mysql/mysql.manager'
+import init from './src/show/init'
+import { playShow } from './src/show/showManagement'
 import express from 'express'
 
 const app = express()
