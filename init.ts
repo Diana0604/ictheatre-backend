@@ -1,6 +1,4 @@
-import { insertElement, init as initDB, restartDB, showAllTables } from '../mysql/mysql.manager'
-import config from '../../config/config.index'
-
+import { init as initDB} from './src/api/mysql/mysql.manager'
 
 /**
  * Init all processes:

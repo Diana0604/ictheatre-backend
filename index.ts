@@ -1,4 +1,4 @@
-import init from './src/api/show/init'
+import init from './init'
 import express from 'express'
 import routes from './src/routes'
 
