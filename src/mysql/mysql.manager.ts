@@ -1,6 +1,12 @@
-import { Connection, createConnection } from 'mysql';
-import config from '../config/config.index';
-import { createTableCommand, insertElementCommand } from './mysql.helpers';
+//database
+import { Connection, createConnection } from 'mysql'
+import { createTableCommand, insertElementCommand } from './mysql.helpers'
+import { Request, Response } from 'express'
+//classes
+import { Company } from '../mysql/objects/mysql.company'
+//config and fixtures
+import config from '../config/config.index'
+import companies from '../fixtures/companies'
 
 let connection: Connection;
 
@@ -80,18 +86,50 @@ export const insertElement = async (obj: any) => {
 }
 
 /**
+ * seed database with:
+ * 1. Companies -> the bot companies that represent other companeis
+ * 
+ * show tables at end
+ */
+const seedDB = async () => {
+  //loop through fixtures and add to database
+  for (const company of companies) {
+    const newCompany = new Company(company)
+    try {
+      await insertElement(newCompany)
+    } catch (error) {
+      throw (error)
+    }
+  }
+  console.log('database seeded')
+
+  //display all tables that have been created
+  try {
+    await showAllTables()
+  } catch (error) {
+    throw (error)
+  }
+}
+
+
+/**
  * delete and create emtpy database
  */
-export const restartDB = async () => {
+export const restartDB = async (req: Request, res: Response) => {
   try {
     //delete database
-    await execute(`DROP DATABASE ${config.mysqlConfig.database};`)
+    await execute(`DROP DATABASE IF EXISTS ${config.mysqlConfig.database};`)
     //create new database with same name
     await execute(`CREATE DATABASE ${config.mysqlConfig.database};`)
     //set newly created database as database to be used for all queries
     await execute(`use ${config.mysqlConfig.database};`)
+    //seed database
+    await seedDB()
+    res.status(200).json({ message: 'database seeded' })
   } catch (error) {
-    throw error
+    res.status(500).json({ message: 'error restarting database - check server logs' })
+    console.log('error creating database')
+    console.log(error)
   }
 }
 
@@ -113,15 +151,15 @@ export const showAllTables = async () => {
  * @returns list of objects obtained from table
  * @throw error if table name does not exist in database
  */
-export const getListOfTableEntries = async(tableName: string) => {
+export const getListOfTableEntries = async (tableName: string) => {
   try {
     const tableArray = await execute(`SELECT * from ${tableName};`) as Array<unknown>
     let newArray = []
-    for(const element of tableArray) {
+    for (const element of tableArray) {
       newArray.push(element)
     }
     return newArray
-  } catch(error) {
+  } catch (error) {
     throw error
   }
 }

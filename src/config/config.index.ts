@@ -11,7 +11,7 @@ const config: IConfig = {
             encrypt: true
         }
     },
-    seedDB: true //set to false if you don't want to seed the dab
+    seedDB: true, //set to false if you don't want to seed the dab
 }
 
 export default config

@@ -1,7 +1,6 @@
-import { disconnect as disconnectDatabase } from './src/mysql/mysql.manager'
 import init from './src/show/init'
-import { playShow } from './src/show/showManagement'
 import express from 'express'
+import routes from './src/routes'
 
 const app = express()
 
@@ -14,6 +13,10 @@ init().then(() => {
     console.log(error)
 })
 
+//set up routes
+routes(app)
+
+//hello world
 app.get('/', function (req, res) {
     res.send('Hello World')
 })
