@@ -2,42 +2,13 @@
 import { Request, Response } from 'express'
 
 //database
-import { execute } from './mysql.wrapper'
-import { createTableCommand, insertElementCommand } from './mysql.helpers'
+import { insertElement, execute } from './mysql.wrapper'
 //classes
 import { Company } from './objects/mysql.company'
 //config and fixtures
 import config from '../../config/config.index'
 import companies from '../../fixtures/companies'
 import { ShowStatus } from './objects/mysql.showStatus'
-
-
-/**
- * Insert object to database into type of it's class name
- * We transform:
- * 1. Class Name -> Table Name
- * 2. Class Properties -> Table Columns
- * 3. Add given object to class
- * WARNING: currently only accepting strings and numbers (which are set as double)
- * @param obj object to be inserted
- */
-export const insertElement = async (obj: any) => {
-  //create table if not exists
-  const createCommand = createTableCommand(obj)
-  try {
-    await execute(createCommand)
-  } catch (error) {
-    throw error
-  }
-
-  //insert element
-  const insertCommand = insertElementCommand(obj)
-  try {
-    await execute(insertCommand)
-  } catch (error) {
-    throw error
-  }
-}
 
 /**
  * seed database with:
@@ -165,7 +136,10 @@ export const setShowStartedDB = async () => {
   try {
     const showStatus = await getShowStatus()
     showStatus.isPlaying = true
-    showStatus.startTime = Date()
+    if (showStatus.startTime == '') {
+      console.log('start time set as now')
+      showStatus.startTime = Date()
+    }
 
     //delete current table
     await execute(`DROP TABLE IF EXISTS ${ShowStatus.name};`)
