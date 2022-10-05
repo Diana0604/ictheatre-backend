@@ -1,4 +1,5 @@
-import { getListOfTableEntries, setShowPausedDB, setShowStartedDB } from '../mysql/mysql.manager'
+import { setShowPausedDB, setShowStartedDB } from '../mysql/mysql.manager'
+import { getListOfTableEntries } from '../mysql/mysql.wrapper'
 import { Company } from '../mysql/objects/mysql.company'
 import { ICompanyProperties } from '../../types/types.mysql'
 import { Request, Response } from 'express'

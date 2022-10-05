@@ -92,3 +92,30 @@ export const cleanDB = async () => {
     //set newly created database as database to be used for all queries
     await execute(`use ${config.mysqlConfig.database};`)
 }
+
+/**
+ * get all tables that are currently stored in the database
+ * @returns Array of tables
+ */
+export const getAllTablesFromDB = async () => {
+    return await execute(`SHOW TABLES FROM ${config.mysqlConfig.database}`) as Array<unknown> as Array<{ Tables_in_ictheatre: string }>
+}
+
+/**
+ * Given the name of a table, return all objects that are in the database
+ * @param tableName name of table
+ * @returns list of objects obtained from table
+ * @throw error if table name does not exist in database
+ */
+ export const getListOfTableEntries = async (tableName: string) => {
+    try {
+      const tableArray = await execute(`SELECT * from ${tableName};`) as Array<unknown> as Array<any>
+      let newArray = []
+      for (const element of tableArray) {
+        newArray.push(element)
+      }
+      return newArray
+    } catch (error) {
+      throw error
+    }
+  }

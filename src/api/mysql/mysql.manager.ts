@@ -2,7 +2,7 @@
 import { Request, Response } from 'express'
 
 //database
-import { insertElement, execute, cleanDB } from './mysql.wrapper'
+import { insertElement, execute, cleanDB, getAllTablesFromDB, getListOfTableEntries } from './mysql.wrapper'
 //classes
 import { Company } from './objects/mysql.company'
 //config and fixtures
@@ -47,7 +47,10 @@ const seedDB = async () => {
 
 
 /**
- * delete and create emtpy database
+ * Restart database:
+ * If show is running -> won't restart
+ * 1. cleanDB -> create new empty database
+ * 2. seedDB -> seedDB with fixtures
  */
 export const restartDB = async (_req: Request, res: Response) => {
   try {
@@ -71,9 +74,9 @@ export const restartDB = async (_req: Request, res: Response) => {
  * Display name of all the tables that are set in our database
  * TODO: will eventually display all content of all tables
  */
-export const showAllTables = async () => {
+const showAllTables = async () => {
   try {
-    const tables = await execute(`SHOW TABLES FROM ${config.mysqlConfig.database}`) as Array<unknown> as Array<{ Tables_in_ictheatre: string }>;
+    const tables = await getAllTablesFromDB()
     for (const table of tables) {
       console.log(`======================= TABLE ==========================`)
       console.log(`TableTitle: ${table.Tables_in_ictheatre}`)
@@ -85,25 +88,6 @@ export const showAllTables = async () => {
         }
       }
     }
-  } catch (error) {
-    throw error
-  }
-}
-
-/**
- * Given the name of a table, return all objects that are in the database
- * @param tableName name of table
- * @returns list of objects obtained from table
- * @throw error if table name does not exist in database
- */
-export const getListOfTableEntries = async (tableName: string) => {
-  try {
-    const tableArray = await execute(`SELECT * from ${tableName};`) as Array<unknown> as Array<any>
-    let newArray = []
-    for (const element of tableArray) {
-      newArray.push(element)
-    }
-    return newArray
   } catch (error) {
     throw error
   }
