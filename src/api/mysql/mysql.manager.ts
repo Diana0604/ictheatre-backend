@@ -2,7 +2,7 @@
 import { Request, Response } from 'express'
 
 //database
-import { insertElement, execute } from './mysql.wrapper'
+import { insertElement, execute, cleanDB } from './mysql.wrapper'
 //classes
 import { Company } from './objects/mysql.company'
 //config and fixtures
@@ -38,9 +38,10 @@ const seedDB = async () => {
 
   //display all tables that have been created
   try {
-    await showAllTables()
+    showAllTables()
   } catch (error) {
-    throw (error)
+    console.log('problem showing tables at end')
+    console.log(error)
   }
 }
 
@@ -55,12 +56,7 @@ export const restartDB = async (_req: Request, res: Response) => {
       res.status(401).json({ message: 'show is currently playing, cannot restart DB' })
       return
     }
-    //delete database
-    await execute(`DROP DATABASE IF EXISTS ${config.mysqlConfig.database};`)
-    //create new database with same name
-    await execute(`CREATE DATABASE ${config.mysqlConfig.database};`)
-    //set newly created database as database to be used for all queries
-    await execute(`use ${config.mysqlConfig.database};`)
+    await cleanDB()
     //seed database
     await seedDB()
     res.status(200).json({ message: 'database seeded' })

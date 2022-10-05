@@ -80,3 +80,15 @@ export const insertElement = async (obj: any) => {
         throw error
     }
 }
+
+/**
+ * Delete database and create new empty database with same name
+ */
+export const cleanDB = async () => {
+    //delete database
+    await execute(`DROP DATABASE IF EXISTS ${config.mysqlConfig.database};`)
+    //create new database with same name
+    await execute(`CREATE DATABASE ${config.mysqlConfig.database};`)
+    //set newly created database as database to be used for all queries
+    await execute(`use ${config.mysqlConfig.database};`)
+}
