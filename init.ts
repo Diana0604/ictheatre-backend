@@ -1,4 +1,4 @@
-import { init as initDB} from './src/api/mysql/mysql.manager'
+import { init as initDB} from './src/api/mysql/mysql.wrapper'
 
 /**
  * Init all processes:
