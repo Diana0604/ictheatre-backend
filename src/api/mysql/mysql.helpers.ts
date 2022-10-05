@@ -33,7 +33,10 @@ const javascriptTypeToMySqlType = (type: string) => {
  */
 const javascriptValueToMySqlValue = (element: any) => {
   switch (typeof element) {
-    case 'string' || 'number': {
+    case 'string': {
+      return `'${element}'`
+    }
+    case 'number': {
       return `'${element}'`
     }
     case 'boolean': {
