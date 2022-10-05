@@ -1,10 +1,9 @@
-import { getListOfTableEntries } from '../mysql/mysql.manager'
+import { getListOfTableEntries, setShowPausedDB, setShowStartedDB } from '../mysql/mysql.manager'
 import { Company } from '../mysql/objects/mysql.company'
 import { ICompanyProperties } from '../../types/types.mysql'
 import { Request, Response } from 'express'
 
 //TODO -> time must come from database
-let time = 0
 let companiesUpdateInterval: NodeJS.Timer
 
 /**
@@ -12,19 +11,37 @@ let companiesUpdateInterval: NodeJS.Timer
  */
 export const playShow = async (_req: Request, res: Response) => {
     try {
+        await setShowStartedDB()
+    } catch (error) {
+        console.log('could not set show to playing')
+        console.log(error)
+        res.status(500).json({ message: 'error starting show - check server logs ' })
+        return
+    }
+
+    try {
         await startCompaniesUpdates()
-        res.status(200).json({ message: 'OK' })
     } catch (error) {
         console.log('could not load list of companies for current show')
         console.log(error)
         res.status(500).json({ message: 'error starting show - check server logs' })
+        return
     }
+    res.status(200).json({ message: 'OK' })
 }
 
 /**
  * pause show from current point
  */
 export const pauseShow = async (_req: Request, res: Response) => {
+    try {
+        await setShowPausedDB()
+    } catch (error) {
+        console.log('could not set show to paused')
+        console.log(error)
+        res.status(500).json({ message: 'error pausing show - check server logs ' })
+        return
+    }
     clearInterval(companiesUpdateInterval)
     res.status(200).json({ message: 'OK' })
 }
@@ -55,6 +72,6 @@ const startCompaniesUpdates = async () => {
 }
 
 const updatePrice = (company: Company) => {
-    console.log(`updating price for: ${company.name}`)
-    console.log(`price updated to: ${company.currentPricePerShare}`)
+    //console.log(`updating price for: ${company.name}`)
+    //console.log(`price updated to: ${company.currentPricePerShare}`)
 }

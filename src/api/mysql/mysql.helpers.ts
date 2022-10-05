@@ -5,15 +5,39 @@
  * WARNING: currently only transforms:
  *   string -> TEXT
  *   number -> DOUBLE
+ *   boolean -> BOOLEAN
  * anything else will trigger an error
  */
-export const javascriptTypeToMySqlType = (type: string) => {
+const javascriptTypeToMySqlType = (type: string) => {
   switch (type) {
     case 'string': {
       return 'TEXT'
     }
     case 'number': {
       return 'DOUBLE'
+    }
+    case 'boolean': {
+      return 'BOOLEAN'
+    }
+  }
+  throw new Error('unknown type')
+}
+
+/**
+ * Given a javascript element, transform to sql element
+ * IF string || number -> only needs to add '' surrounding it
+ * IF boolean -> needs to be transformed to mayus TRUE / FALSE
+ * @param element to be transformed
+ * @returns string with element transformed
+ * @throws error if element given is of type that cannot be transformed
+ */
+const javascriptValueToMySqlValue = (element: any) => {
+  switch (typeof element) {
+    case 'string' || 'number': {
+      return `'${element}'`
+    }
+    case 'boolean': {
+      return element ? `TRUE` : `FALSE`
     }
   }
   throw new Error('unknown type')
@@ -50,7 +74,7 @@ export const insertElementCommand = (obj: any) => {
   //then specify values
   insertElementCommand = insertElementCommand + ') VALUES ('
   for (const key in obj) {
-    insertElementCommand = insertElementCommand + `'${obj[key]}', `
+    insertElementCommand = insertElementCommand + `${javascriptValueToMySqlValue(obj[key])}, `
   }
   insertElementCommand = insertElementCommand.slice(0, -2)
   insertElementCommand = insertElementCommand + ');'
