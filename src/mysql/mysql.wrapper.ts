@@ -1,5 +1,5 @@
 //config
-import config from "../../config/config.index"
+import config from "../config/config.index"
 //database
 import { Connection, createConnection } from "mysql"
 import { createTableCommand, insertElementCommand } from './mysql.helpers'

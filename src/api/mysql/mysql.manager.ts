@@ -2,13 +2,12 @@
 import { Request, Response } from 'express'
 
 //database
-import { insertElement, cleanDB, getAllTablesFromDB, getListOfTableEntries, deleteTableDB, getFirstTableElement } from './mysql.wrapper'
+import { insertElement, cleanDB, getAllTablesFromDB, getListOfTableEntries, deleteTableDB, getFirstTableElement } from '../../mysql/mysql.wrapper'
 //classes
-import { Company } from './objects/mysql.company'
+import { Company } from '../../mysql/objects/mysql.company'
 //config and fixtures
-import config from '../../config/config.index'
 import companies from '../../fixtures/companies'
-import { ShowStatus } from './objects/mysql.showStatus'
+import { ShowStatus } from '../../mysql/objects/mysql.showStatus'
 import { ICompanyProperties, IShowStatus } from '../../types/types.mysql'
 
 /**

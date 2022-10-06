@@ -1,5 +1,5 @@
 import { getAllCompanies, setShowPaused, setShowStarted } from '../mysql/mysql.manager'
-import { Company } from '../mysql/objects/mysql.company'
+import { Company } from '../../mysql/objects/mysql.company'
 import { Request, Response } from 'express'
 
 //TODO -> time must come from database

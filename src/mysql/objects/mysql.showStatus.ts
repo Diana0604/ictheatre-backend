@@ -1,4 +1,4 @@
-import { IShowStatus } from "../../../types/types.mysql"
+import { IShowStatus } from "../../types/types.mysql"
 
 /**
  * Show manager class - only one per show
