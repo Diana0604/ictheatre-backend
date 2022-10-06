@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { restartDB } from './mysql.manager'
+import { restartDB } from './mysql.controller'
 
 let router = Router()
 

@@ -1,6 +1,6 @@
-import { getAllCompanies, setShowPaused, setShowStarted } from '../mysql/mysql.manager'
 import { Company } from '../../mysql/objects/mysql.company'
 import { Request, Response } from 'express'
+import { getAllCompanies, setShowPaused, setShowStarted } from '../../mysql/mysql.manager'
 
 //TODO -> time must come from database
 let companiesUpdateInterval: NodeJS.Timer
