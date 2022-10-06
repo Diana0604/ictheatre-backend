@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { pauseShow, playShow } from './show.manager'
+import { pauseShow, playShow } from './show.controller'
 
 let router = Router()
 
