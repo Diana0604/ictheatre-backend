@@ -3,7 +3,6 @@ import config from "../../config/config.index"
 //database
 import { Connection, createConnection } from "mysql"
 import { createTableCommand, insertElementCommand } from './mysql.helpers'
-
 let connection: Connection
 
 /**
@@ -38,7 +37,7 @@ export const disconnect = () => {
  * @param {string} query - provide a valid SQL query
  * in the query
  */
-export const execute = <T>(query: string): Promise<T> => {
+const execute = <T>(query: string): Promise<T> => {
     try {
         return new Promise<T>((resolve, reject) => {
             connection.query(query, (error, results, _fields) => {
@@ -107,15 +106,40 @@ export const getAllTablesFromDB = async () => {
  * @returns list of objects obtained from table
  * @throw error if table name does not exist in database
  */
- export const getListOfTableEntries = async (tableName: string) => {
+export const getListOfTableEntries = async (tableName: string) => {
     try {
-      const tableArray = await execute(`SELECT * from ${tableName};`) as Array<unknown> as Array<any>
-      let newArray = []
-      for (const element of tableArray) {
-        newArray.push(element)
-      }
-      return newArray
+        const tableArray = await execute(`SELECT * from ${tableName};`) as Array<unknown> as Array<any>
+        let newArray = []
+        for (const element of tableArray) {
+            newArray.push(element)
+        }
+        return newArray
     } catch (error) {
-      throw error
+        throw error
     }
-  }
+}
+
+/**
+ * Get first element of given table
+ * @param tableName name of table that we want first element of
+ * @returns first element of array as arrayRow
+ */
+export const getFirstTableElement = async (tableName: string) => {
+    try {
+        const tableArray = await execute(`SELECT * from ${tableName};`) as Array<unknown>
+        return tableArray[0]
+    } catch(error) {
+        throw error
+    }
+}
+
+/**
+ *Delete table from database
+ */
+export const deleteTableDB = async (tableName: string) => {
+    try {
+        await execute(`DROP TABLE IF EXISTS ${tableName};`)
+    } catch(error) {
+        throw error
+    }
+}

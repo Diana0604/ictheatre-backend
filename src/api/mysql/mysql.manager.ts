@@ -2,13 +2,14 @@
 import { Request, Response } from 'express'
 
 //database
-import { insertElement, execute, cleanDB, getAllTablesFromDB, getListOfTableEntries } from './mysql.wrapper'
+import { insertElement, cleanDB, getAllTablesFromDB, getListOfTableEntries, deleteTableDB, getFirstTableElement } from './mysql.wrapper'
 //classes
 import { Company } from './objects/mysql.company'
 //config and fixtures
 import config from '../../config/config.index'
 import companies from '../../fixtures/companies'
 import { ShowStatus } from './objects/mysql.showStatus'
+import { ICompanyProperties, IShowStatus } from '../../types/types.mysql'
 
 /**
  * seed database with:
@@ -42,6 +43,20 @@ const seedDB = async () => {
   } catch (error) {
     console.log('problem showing tables at end')
     console.log(error)
+  }
+}
+
+
+/**
+* Get show status from database
+* @returns show status as object
+*/
+export const getShowStatus = async () => {
+  try {
+    const showStatus = await getFirstTableElement(ShowStatus.name)
+    return new ShowStatus(showStatus as IShowStatus)
+  } catch (error) {
+    throw error
   }
 }
 
@@ -93,26 +108,10 @@ const showAllTables = async () => {
   }
 }
 
-
-/**
- * Get show status from database
- * @param tableName name of table
- * @returns list of objects obtained from table
- * @throw error if table name does not exist in database
- */
-const getShowStatus = async () => {
-  try {
-    const tableArray = await execute(`SELECT * from ${ShowStatus.name};`) as Array<unknown> as Array<ShowStatus>
-    return new ShowStatus(tableArray[0])
-  } catch (error) {
-    throw error
-  }
-}
-
 /**
  * get show object from db and set to started
  */
-export const setShowStartedDB = async () => {
+export const setShowStarted = async () => {
   try {
     const showStatus = await getShowStatus()
     showStatus.isPlaying = true
@@ -122,7 +121,8 @@ export const setShowStartedDB = async () => {
     }
 
     //delete current table
-    await execute(`DROP TABLE IF EXISTS ${ShowStatus.name};`)
+    await deleteTableDB(ShowStatus.name)
+    //insert new element
     await insertElement(showStatus)
   } catch (error) {
     throw error
@@ -132,15 +132,31 @@ export const setShowStartedDB = async () => {
 /**
  * get show object from db and set to started
  */
-export const setShowPausedDB = async () => {
+export const setShowPaused = async () => {
   try {
     const showStatus = await getShowStatus()
     showStatus.isPlaying = false
 
     //delete current table
-    await execute(`DROP TABLE IF EXISTS ${ShowStatus.name};`)
+    await deleteTableDB(ShowStatus.name)
+    //insert new element
     await insertElement(showStatus)
   } catch (error) {
     throw error
   }
+}
+
+/**
+ *
+ * @returns list of all companies
+ */
+export const getAllCompanies = async () => {
+  const companiesList = await getListOfTableEntries(Company.name)
+  let allCompaniesList: Company[] = []
+  //convert database objects into company objects
+  for (const element of companiesList) {
+    const newCompany = new Company(element as ICompanyProperties)
+    allCompaniesList.push(newCompany)
+  }
+  return allCompaniesList
 }

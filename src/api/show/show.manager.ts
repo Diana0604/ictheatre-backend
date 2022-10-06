@@ -1,7 +1,5 @@
-import { setShowPausedDB, setShowStartedDB } from '../mysql/mysql.manager'
-import { getListOfTableEntries } from '../mysql/mysql.wrapper'
+import { getAllCompanies, setShowPaused, setShowStarted } from '../mysql/mysql.manager'
 import { Company } from '../mysql/objects/mysql.company'
-import { ICompanyProperties } from '../../types/types.mysql'
 import { Request, Response } from 'express'
 
 //TODO -> time must come from database
@@ -12,7 +10,7 @@ let companiesUpdateInterval: NodeJS.Timer
  */
 export const playShow = async (_req: Request, res: Response) => {
     try {
-        await setShowStartedDB()
+        await setShowStarted()
     } catch (error) {
         console.log('could not set show to playing')
         console.log(error)
@@ -36,7 +34,7 @@ export const playShow = async (_req: Request, res: Response) => {
  */
 export const pauseShow = async (_req: Request, res: Response) => {
     try {
-        await setShowPausedDB()
+        await setShowPaused()
     } catch (error) {
         console.log('could not set show to paused')
         console.log(error)
@@ -47,19 +45,14 @@ export const pauseShow = async (_req: Request, res: Response) => {
     res.status(200).json({ message: 'OK' })
 }
 
+
 /**
  * set an interval to update price for companies every second
  */
 const startCompaniesUpdates = async () => {
     try {
         //get companies list from database
-        const companiesList = await getListOfTableEntries(Company.name)
-        let allCompaniesList: Company[] = []
-        //convert database objects into company objects
-        for (const element of companiesList) {
-            const newCompany = new Company(element as ICompanyProperties)
-            allCompaniesList.push(newCompany)
-        }
+        const allCompaniesList = await getAllCompanies()
         //set the interval for every second and store it in global variable
         companiesUpdateInterval = setInterval(() => {
             for (const company of allCompaniesList) {
