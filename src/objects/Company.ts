@@ -1,4 +1,4 @@
-import { ICompanyProperties } from '../../types/types.mysql'
+import { ICompanyProperties } from '../types/types.mysql'
 
 let fakeId = 0
 

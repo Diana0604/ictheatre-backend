@@ -1,6 +1,6 @@
 import config from '../config/config.index'
 import { addToTimerInSeconds, getAllCompanies, getShowStatus } from '../mysql/mysql.manager'
-import { Company } from '../mysql/objects/mysql.company'
+import { Company } from '../objects/Company'
 
 /**
  * set an interval to update:

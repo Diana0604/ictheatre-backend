@@ -1,12 +1,11 @@
 //database
-import { insertElement, cleanDB, getAllTablesFromDB, getListOfTableEntries, deleteTableDB, getFirstTableElement } from './mysql.wrapper'
+import { insertElement, getAllTablesFromDB, getListOfTableEntries, deleteTableDB, getFirstTableElement } from './mysql.wrapper'
 //classes
-import { Company } from './objects/mysql.company'
+import { Company } from '../objects/Company'
 //config and fixtures
 import companies from '../fixtures/companies'
-import { ShowStatus } from './objects/mysql.showStatus'
+import { ShowStatus } from '../objects/ShowStatus'
 import { ICompanyProperties, IShowStatus } from '../types/types.mysql'
-import config from '../config/config.index'
 
 /**
  * seed database with:
