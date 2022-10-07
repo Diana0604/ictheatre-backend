@@ -32,6 +32,6 @@ export interface ICompanyProperties {
  * Timer of show development
  */
 export interface IShowStatus {
-    startTime: string | null
+    timeSinceStartup: number
     isPlaying: boolean
 }

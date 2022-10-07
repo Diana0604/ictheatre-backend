@@ -1,9 +1,10 @@
 import { Company } from '../../mysql/objects/mysql.company'
 import { Request, Response } from 'express'
-import { getAllCompanies, setShowPaused, setShowStarted } from '../../mysql/mysql.manager'
+import { getAllCompanies, getShowStatus, setShowPaused, setShowStarted, updateTimer } from '../../mysql/mysql.manager'
+import config from '../../config/config.index'
 
 //TODO -> time must come from database
-let companiesUpdateInterval: NodeJS.Timer
+let updateInterval: NodeJS.Timer
 
 /**
  * play show from current point
@@ -19,7 +20,7 @@ export const playShow = async (_req: Request, res: Response) => {
     }
 
     try {
-        await startCompaniesUpdates()
+        await startUpdates()
     } catch (error) {
         console.log('could not load list of companies for current show')
         console.log(error)
@@ -41,7 +42,7 @@ export const pauseShow = async (_req: Request, res: Response) => {
         res.status(500).json({ message: 'error pausing show - check server logs ' })
         return
     }
-    clearInterval(companiesUpdateInterval)
+    clearInterval(updateInterval)
     res.status(200).json({ message: 'OK' })
 }
 
@@ -49,12 +50,16 @@ export const pauseShow = async (_req: Request, res: Response) => {
 /**
  * set an interval to update price for companies every second
  */
-const startCompaniesUpdates = async () => {
+const startUpdates = async () => {
     try {
         //get companies list from database
         const allCompaniesList = await getAllCompanies()
         //set the interval for every second and store it in global variable
-        companiesUpdateInterval = setInterval(() => {
+        updateInterval = setInterval(async () => {
+            console.log('========================= A SECOND HAS PASSED ============================')
+            console.log('============================= UPDATING TIME ==============================')
+            await updateTimer()
+            console.log('========================= UPDATING COMPANIES =============================')
             for (const company of allCompaniesList) {
                 updatePrice(company)
             }
@@ -65,7 +70,11 @@ const startCompaniesUpdates = async () => {
     }
 }
 
-const updatePrice = (company: Company) => {
-    //console.log(`updating price for: ${company.name}`)
-    //console.log(`price updated to: ${company.currentPricePerShare}`)
+const updatePrice = async (company: Company) => {
+
+    const secsSinceStartup = (await getShowStatus()).timeSinceStartup
+    const linearPrice = (company.finalPricePerShare - company.initPricePerShare) / config.showConfig.lengthInSeconds * secsSinceStartup + company.initPricePerShare
+    company.currentPricePerShare = linearPrice
+    console.log(`updating price for: ${company.name}`)
+    console.log(`price updated to: ${company.currentPricePerShare}`)
 }

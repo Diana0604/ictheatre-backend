@@ -15,7 +15,7 @@ import { ICompanyProperties, IShowStatus } from '../types/types.mysql'
  */
 export const seedDB = async () => {
     //setup show status
-    const showStatus = new ShowStatus({ startTime: null, isPlaying: false })
+    const showStatus = new ShowStatus({ timeSinceStartup: 0, isPlaying: false })
     try {
         await (insertElement(showStatus))
     } catch (error) {
@@ -86,10 +86,6 @@ export const setShowStarted = async () => {
     try {
         const showStatus = await getShowStatus()
         showStatus.isPlaying = true
-        if (showStatus.startTime == '') {
-            console.log('start time set as now')
-            showStatus.startTime = Date()
-        }
 
         //delete current table
         await deleteTableDB(ShowStatus.name)
@@ -115,6 +111,25 @@ export const setShowPaused = async () => {
     } catch (error) {
         throw error
     }
+}
+
+
+/**
+ * Update timer in show status to +1
+ */
+export const updateTimer = async () => {
+    try {
+        let showStatus = await getShowStatus()
+        showStatus.timeSinceStartup++
+
+        //delete current table
+        await deleteTableDB(ShowStatus.name)
+        //insert new element
+        await insertElement(showStatus)
+    } catch (error) {
+        throw error
+    }
+
 }
 
 /**

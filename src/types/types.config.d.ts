@@ -5,5 +5,6 @@
  */
 export interface IConfig {
     mysqlConfig: IDatabaseConfig,
-    seedDB: boolean
+    seedDB: boolean,
+    showConfig: IShowConfig
 }

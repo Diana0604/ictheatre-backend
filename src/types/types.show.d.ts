@@ -1,0 +1,3 @@
+interface IShowConfig {
+    lengthInSeconds: number
+}
