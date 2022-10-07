@@ -6,6 +6,7 @@ import { Company } from './objects/mysql.company'
 import companies from '../fixtures/companies'
 import { ShowStatus } from './objects/mysql.showStatus'
 import { ICompanyProperties, IShowStatus } from '../types/types.mysql'
+import config from '../config/config.index'
 
 /**
  * seed database with:
@@ -120,7 +121,7 @@ export const setShowPaused = async () => {
 export const updateTimer = async () => {
     try {
         let showStatus = await getShowStatus()
-        showStatus.timeSinceStartup++
+        showStatus.timeSinceStartup = showStatus.timeSinceStartup + config.showConfig.updateIntervalInSeconds
 
         //delete current table
         await deleteTableDB(ShowStatus.name)

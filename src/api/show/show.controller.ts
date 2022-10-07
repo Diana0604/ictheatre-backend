@@ -63,7 +63,7 @@ const startUpdates = async () => {
             for (const company of allCompaniesList) {
                 updatePrice(company)
             }
-        }, 1000)
+        }, config.showConfig.updateIntervalInSeconds*1000)
 
     } catch (error) {
         throw error
