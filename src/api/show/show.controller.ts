@@ -32,6 +32,7 @@ export const playShow = async (_req: Request, res: Response) => {
  * pause show from current point
  */
 export const pauseShow = async (_req: Request, res: Response) => {
+    clearInterval(updateInterval)
     try {
         await setShowPaused()
     } catch (error) {
@@ -40,6 +41,5 @@ export const pauseShow = async (_req: Request, res: Response) => {
         res.status(500).json({ message: 'error pausing show - check server logs ' })
         return
     }
-    clearInterval(updateInterval)
     res.status(200).json({ message: 'OK' })
 }
