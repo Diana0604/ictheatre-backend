@@ -1,7 +1,6 @@
-import { Company } from '../../mysql/objects/mysql.company'
 import { Request, Response } from 'express'
-import { getAllCompanies, getShowStatus, setShowPaused, setShowStarted, updateTimer } from '../../mysql/mysql.manager'
-import config from '../../config/config.index'
+import { setShowPaused, setShowStarted } from '../../mysql/mysql.manager'
+import { startUpdates } from '../../functions/showUpdates'
 
 //TODO -> time must come from database
 let updateInterval: NodeJS.Timer
@@ -44,37 +43,4 @@ export const pauseShow = async (_req: Request, res: Response) => {
     }
     clearInterval(updateInterval)
     res.status(200).json({ message: 'OK' })
-}
-
-
-/**
- * set an interval to update price for companies every second
- */
-const startUpdates = async () => {
-    try {
-        //get companies list from database
-        const allCompaniesList = await getAllCompanies()
-        //set the interval for every second and store it in global variable
-        updateInterval = setInterval(async () => {
-            console.log('========================= A SECOND HAS PASSED ============================')
-            console.log('============================= UPDATING TIME ==============================')
-            await updateTimer()
-            console.log('========================= UPDATING COMPANIES =============================')
-            for (const company of allCompaniesList) {
-                updatePrice(company)
-            }
-        }, config.showConfig.updateIntervalInSeconds*1000)
-
-    } catch (error) {
-        throw error
-    }
-}
-
-const updatePrice = async (company: Company) => {
-
-    const secsSinceStartup = (await getShowStatus()).timeSinceStartup
-    const linearPrice = (company.finalPricePerShare - company.initPricePerShare) / config.showConfig.lengthInSeconds * secsSinceStartup + company.initPricePerShare
-    company.currentPricePerShare = linearPrice
-    console.log(`updating price for: ${company.name}`)
-    console.log(`price updated to: ${company.currentPricePerShare}`)
 }

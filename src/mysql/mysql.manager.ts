@@ -118,10 +118,10 @@ export const setShowPaused = async () => {
 /**
  * Update timer in show status to +1
  */
-export const updateTimer = async () => {
+export const addToTimerInSeconds = async (seconds: number) => {
     try {
         let showStatus = await getShowStatus()
-        showStatus.timeSinceStartup = showStatus.timeSinceStartup + config.showConfig.updateIntervalInSeconds
+        showStatus.timeSinceStartup = showStatus.timeSinceStartup + seconds
 
         //delete current table
         await deleteTableDB(ShowStatus.name)
