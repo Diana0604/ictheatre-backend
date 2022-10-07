@@ -3,14 +3,16 @@ import { addToTimerInSeconds, getAllCompanies, getShowStatus } from '../mysql/my
 import { Company } from '../mysql/objects/mysql.company'
 
 /**
- * set an interval to update price for companies every second
+ * set an interval to update:
+ * 1. Timer
+ * 2. Companies according to new time
  */
 export const startUpdates = async () => {
     try {
         //get companies list from database
         const allCompaniesList = await getAllCompanies()
         //set the interval for every second and store it in global variable
-        const updateInterval = setInterval(async () => {
+        return setInterval(async () => {
             console.log('========================= A SECOND HAS PASSED ============================')
             console.log('============================= UPDATING TIME ==============================')
             await updateTimer()
@@ -25,10 +27,17 @@ export const startUpdates = async () => {
     }
 }
 
+/**
+ * Update timer in database
+ */
 const updateTimer = async () => {
     await addToTimerInSeconds(config.showConfig.updateIntervalInSeconds)
 }
 
+/**
+ *  Update the company price following a linear aproximation from initial price to final price
+ * @param company
+ */
 const updatePrice = async (company: Company) => {
 
     const secsSinceStartup = (await getShowStatus()).timeSinceStartup

@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import { setShowPaused, setShowStarted } from '../../mysql/mysql.manager'
 import { startUpdates } from '../../functions/showUpdates'
 
-//TODO -> time must come from database
 let updateInterval: NodeJS.Timer
 
 /**
@@ -19,7 +18,7 @@ export const playShow = async (_req: Request, res: Response) => {
     }
 
     try {
-        await startUpdates()
+        updateInterval = await startUpdates()
     } catch (error) {
         console.log('could not load list of companies for current show')
         console.log(error)
