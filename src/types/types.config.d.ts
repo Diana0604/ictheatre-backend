@@ -1,3 +1,5 @@
+import { IDatabaseConfig } from './types.mysql'
+
 /**
  * General configuration file
  * mysqlConfig -> see types.mysql.d.ts

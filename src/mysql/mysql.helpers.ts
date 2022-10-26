@@ -83,3 +83,15 @@ export const insertElementCommand = (obj: any) => {
   insertElementCommand = insertElementCommand + ');'
   return insertElementCommand
 }
+
+/**
+ * Update an element
+ * @param obj -> object linked to table that we want to update
+ * @param uniqueKey -> pair of key / value that identifies element in table
+ * @param valueNamePair -> pair of value / name that needs updating
+ * @returns
+ */
+export const updateElementCommand = (obj: any, uniqueKey: { key: string, value: string }, valueNamePair: { value: any, name: string }) => {
+  let updateElementCommand = `UPDATE ${obj.constructor.name} set ${valueNamePair.name}='${valueNamePair.value}' where ${uniqueKey.key}='${uniqueKey.value}';`
+  return updateElementCommand
+}

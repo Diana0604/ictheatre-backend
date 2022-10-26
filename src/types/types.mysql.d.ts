@@ -11,7 +11,7 @@ export interface IDatabaseConfig {
     connectionLimit: number,
     user: string,
     password: string,
-    server: string,
+    host: string,
     database: string,
     options: {
         encrypt: true
@@ -25,7 +25,8 @@ export interface ICompanyProperties {
     name: string,
     description: string,
     initPricePerShare: number, //price at init of show
-    finalPricePerShare: number //price at end of show
+    finalPricePerShare: number, //price at end of show
+    currentPricePerShare?: number //price right now
 }
 
 /**

@@ -1,5 +1,6 @@
 import config from '../config/config.index'
 import { addToTimerInSeconds, getAllCompanies, getShowStatus } from '../mysql/mysql.manager'
+import { updateElement } from '../mysql/mysql.wrapper'
 import { Company } from '../objects/Company'
 
 /**
@@ -43,6 +44,6 @@ const updatePrice = async (company: Company) => {
     const secsSinceStartup = (await getShowStatus()).timeSinceStartup
     const linearPrice = (company.finalPricePerShare - company.initPricePerShare) / config.showConfig.lengthInSeconds * secsSinceStartup + company.initPricePerShare
     company.currentPricePerShare = linearPrice
-    console.log(`updating price for: ${company.name}`)
-    console.log(`price updated to: ${company.currentPricePerShare}`)
+    await updateElement(company, {key: 'name', value: company.name}, {value: linearPrice, name: 'currentPricePerShare'})
+    console.log(`${company.name}'s stock price updated to: ${company.currentPricePerShare}`)
 }

@@ -17,7 +17,9 @@ export class Company {
         this.name = props.name
         this.description = props.description
         this.initPricePerShare = props.initPricePerShare
-        this.currentPricePerShare = props.initPricePerShare
+        if (!props.currentPricePerShare)
+            this.currentPricePerShare = props.initPricePerShare
+        else this.currentPricePerShare = props.currentPricePerShare
         this.finalPricePerShare = props.finalPricePerShare
         this.id = fakeId
         fakeId++

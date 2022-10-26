@@ -2,7 +2,7 @@
 import config from "../config/config.index"
 //database
 import { Connection, createConnection } from "mysql"
-import { createTableCommand, insertElementCommand } from './mysql.helpers'
+import { createTableCommand, insertElementCommand, updateElementCommand } from './mysql.helpers'
 let connection: Connection
 
 /**
@@ -68,6 +68,7 @@ export const insertElement = async (obj: any) => {
     try {
         await execute(createCommand)
     } catch (error) {
+        console.log(`error creating table: ${obj}`)
         throw error
     }
 
@@ -76,6 +77,16 @@ export const insertElement = async (obj: any) => {
     try {
         await execute(insertCommand)
     } catch (error) {
+        throw error
+    }
+}
+
+export const updateElement = async (obj: any, uniqueKey: {key: string, value: string}, valueNamePair: {value: any, name: string}) => {
+    const updateCommand = updateElementCommand(obj, uniqueKey, valueNamePair)
+    try {
+        await execute(updateCommand)
+    } catch(error) {
+        console.log(`error updating object: ${obj}`)
         throw error
     }
 }
@@ -129,6 +140,7 @@ export const getFirstTableElement = async (tableName: string) => {
         const tableArray = await execute(`SELECT * from ${tableName};`) as Array<unknown>
         return tableArray[0]
     } catch(error) {
+        console.log(`error getting element from ${tableName}`)
         throw error
     }
 }
@@ -140,6 +152,7 @@ export const deleteTableDB = async (tableName: string) => {
     try {
         await execute(`DROP TABLE IF EXISTS ${tableName};`)
     } catch(error) {
+        console.log(`error deleting table: ${tableName}`)
         throw error
     }
 }

@@ -52,6 +52,7 @@ export const getShowStatus = async () => {
         const showStatus = await getFirstTableElement(ShowStatus.name)
         return new ShowStatus(showStatus as IShowStatus)
     } catch (error) {
+        console.log('error getting show status')
         throw error
     }
 }
@@ -134,7 +135,7 @@ export const addToTimerInSeconds = async (seconds: number) => {
 
 /**
  *
- * @returns list of all companies
+ * @returns list of all companies from database
  */
 export const getAllCompanies = async () => {
     const companiesList = await getListOfTableEntries(Company.name)
