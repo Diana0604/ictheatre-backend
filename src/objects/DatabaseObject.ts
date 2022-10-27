@@ -7,9 +7,12 @@ let idGenerator = 0
 export class DatabaseObject {
     id: number
 
-    constructor() {
-        this.id = idGenerator
-        idGenerator++
+    constructor( currentId: number | undefined ) {
+        if (currentId) this.id = currentId
+        else {
+            this.id = idGenerator
+            idGenerator++
+        }
     }
 
 }

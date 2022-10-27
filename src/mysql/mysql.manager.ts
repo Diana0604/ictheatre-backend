@@ -1,5 +1,5 @@
 //database
-import { insertElement, getAllTablesFromDB, getListOfTableEntries, deleteTableDB, getFirstTableElement } from './mysql.wrapper'
+import { insertElement, getAllTablesFromDB, getListOfTableEntries, deleteTableDB, getFirstTableElement, getElementById } from './mysql.wrapper'
 //classes
 import { Company } from '../objects/Company'
 //config and fixtures
@@ -149,4 +149,8 @@ export const getAllCompanies = async () => {
         allCompaniesList.push(newCompany)
     }
     return allCompaniesList
+}
+
+export const getCompanyInformation = async (companyId: string) => {
+    return await getElementById(companyId, Company.name)
 }

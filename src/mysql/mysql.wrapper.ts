@@ -2,7 +2,7 @@
 import config from "../config/config.index"
 //database
 import { Connection, createConnection } from "mysql"
-import { createDatabaseCommand, createTableCommand, dropDatabaseCommand, dropTableCommand, insertElementCommand, selectTableExistsCommand, showEntriesFromTableCommand, showTablesFromDatabaseCommand, updateElementCommand, useDatabaseCommand } from './mysql.helpers'
+import { createDatabaseCommand, createTableCommand, dropDatabaseCommand, dropTableCommand, insertElementCommand, selectByIdCommand, selectTableExistsCommand, showEntriesFromTableCommand, showTablesFromDatabaseCommand, updateElementCommand, useDatabaseCommand } from './mysql.helpers'
 let connection: Connection
 
 /**
@@ -141,7 +141,7 @@ export const getListOfTableEntries = async (tableName: string) => {
 /**
  * Get first element of given table
  * @param tableName name of table that we want first element of
- * @returns first element of array as arrayRow
+ * @returns first element of array as arrayRow or null if table doesn't exist
  */
 export const getFirstTableElement = async (tableName: string) => {
     //if table does not exists -> return null
@@ -182,6 +182,42 @@ export const deleteTableDB = async (tableName: string) => {
         await execute(dropTable)
     } catch (error) {
         console.log(`error deleting table: ${tableName}`)
+        throw error
+    }
+}
+
+/**
+ * Get element by id
+ * @param id id of element to get
+ * @param tableName name of table that we want first element of
+ * @returns element with given id or null if table doesn't exist
+ */
+ export const getElementById = async (id: string, tableName: string) => {
+    //if table does not exists -> return null
+    try {
+        /**
+         * select table exists returns an array with one object similar to:
+         * { EXISTS ( SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_TYPE LIKE 'BASE TABLE' AND TABLE_NAME = 'Company') : 0 }
+         * { EXISTS ( SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_TYPE LIKE 'BASE TABLE' AND TABLE_NAME = 'Company') : 1 }
+         * For this reason we iterate on it through keys rather than write the whole key as it will only be one key which will be true or false
+         */
+        let selectTableExists = selectTableExistsCommand(tableName)
+        const tableExists = await execute(selectTableExists) as Array<any>
+        for (const key in tableExists[0]) if (!tableExists[0][key]) {
+            console.log(`table ${tableName} does not exists in our database`)
+            return null
+        }
+    } catch (error) {
+        console.log(`error checking table exists from ${tableName}`)
+        throw error
+    }
+    //if table exists -> return element
+    try {
+        const selectById = selectByIdCommand(id, tableName)
+        const tableArray = await execute(selectById) as Array<unknown>
+        return tableArray[0]
+    } catch (error) {
+        console.log(`error getting element from ${tableName}`)
         throw error
     }
 }

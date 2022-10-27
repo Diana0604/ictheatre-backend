@@ -9,7 +9,6 @@
  * anything else will trigger an error
  */
 const javascriptTypeToMySqlType = (type: string) => {
-  console.log(type)
   switch (type) {
     case 'string': {
       return 'TEXT'
@@ -83,15 +82,15 @@ export const insertElementCommand = (obj: any) => {
   let insertElementCommand = `INSERT INTO ${obj.constructor.name} (`
   //first list all the table titles
   for (const key in obj) {
-    if(canBecomeMysqlType(typeof obj[key] ))
+    if (canBecomeMysqlType(typeof obj[key]))
       insertElementCommand = insertElementCommand + `${key}, `
   }
   insertElementCommand = insertElementCommand.slice(0, -2)
   //then specify values
   insertElementCommand = insertElementCommand + ') VALUES ('
   for (const key in obj) {
-    if(canBecomeMysqlType(typeof obj[key] ))
-    insertElementCommand = insertElementCommand + `${javascriptValueToMySqlValue(obj[key])}, `
+    if (canBecomeMysqlType(typeof obj[key]))
+      insertElementCommand = insertElementCommand + `${javascriptValueToMySqlValue(obj[key])}, `
   }
   insertElementCommand = insertElementCommand.slice(0, -2)
   insertElementCommand = insertElementCommand + ');'
@@ -107,7 +106,7 @@ export const updateElementCommand = (obj: any) => {
 
   let updateElementCommand = `UPDATE ${obj.constructor.name} set `
   for (const key in obj) {
-    if(canBecomeMysqlType(typeof obj[key]))
+    if (canBecomeMysqlType(typeof obj[key]))
       updateElementCommand = updateElementCommand + `${key}=${javascriptValueToMySqlValue(obj[key])}, `
   }
   updateElementCommand = updateElementCommand.slice(0, -2)
@@ -177,4 +176,14 @@ export const selectTableExistsCommand = (table: string) => {
  */
 export const dropTableCommand = (table: string) => {
   return `DROP TABLE IF EXISTS ${table};`
+}
+
+/**
+ * Returns string for Mysql command to select element given an id and a table
+ * @param id
+ * @param table
+ * @returns
+ */
+export const selectByIdCommand = (id: string, table: string) => {
+  return `SELECT * FROM ${table} WHERE id=${id};`
 }

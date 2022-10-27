@@ -8,8 +8,8 @@ export class ShowStatus extends DatabaseObject {
     timeSinceStartup: number //in seconds
     isPlaying: boolean
 
-    constructor({ timeSinceStartup, isPlaying }: IShowStatus) {
-        super()
+    constructor({ timeSinceStartup, isPlaying, id }: IShowStatus) {
+        super(id)
         this.isPlaying = isPlaying
         this.timeSinceStartup = timeSinceStartup
     }

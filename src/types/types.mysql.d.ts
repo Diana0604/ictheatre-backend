@@ -22,6 +22,7 @@ export interface IDatabaseConfig {
  * Properties to be passed in company constructor
  */
 export interface ICompanyProperties {
+    id?: number,
     name: string,
     description: string,
     initPricePerShare: number, //price at init of show
@@ -33,6 +34,7 @@ export interface ICompanyProperties {
  * Timer of show development
  */
 export interface IShowStatus {
+    id?: number
     timeSinceStartup: number
     isPlaying: boolean
 }

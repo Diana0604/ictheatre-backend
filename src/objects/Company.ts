@@ -14,7 +14,7 @@ export class Company extends DatabaseObject {
     finalPricePerShare: number
 
     constructor(props: ICompanyProperties) {
-        super()
+        super(props.id)
         this.name = props.name
         this.description = props.description
         this.initPricePerShare = props.initPricePerShare
