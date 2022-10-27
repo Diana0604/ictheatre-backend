@@ -1,12 +1,12 @@
 import { ICompanyProperties } from '../types/types.mysql'
+import { DatabaseObject } from './DatabaseObject'
 
-let fakeId = 0
+let companyId = 0
 
 /**
  * Company class
  */
-export class Company {
-    id: number
+export class Company extends DatabaseObject {
     name: string
     description: string
     initPricePerShare: number
@@ -14,6 +14,7 @@ export class Company {
     finalPricePerShare: number
 
     constructor(props: ICompanyProperties) {
+        super()
         this.name = props.name
         this.description = props.description
         this.initPricePerShare = props.initPricePerShare
@@ -21,8 +22,6 @@ export class Company {
             this.currentPricePerShare = props.initPricePerShare
         else this.currentPricePerShare = props.currentPricePerShare
         this.finalPricePerShare = props.finalPricePerShare
-        this.id = fakeId
-        fakeId++
     }
 }
 

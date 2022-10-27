@@ -50,6 +50,9 @@ export const seedDB = async () => {
 export const getShowStatus = async () => {
     try {
         const showStatus = await getFirstTableElement(ShowStatus.name)
+        if (!showStatus) {
+            return new ShowStatus({ timeSinceStartup: 0, isPlaying: false })
+        }
         return new ShowStatus(showStatus as IShowStatus)
     } catch (error) {
         console.log('error getting show status')

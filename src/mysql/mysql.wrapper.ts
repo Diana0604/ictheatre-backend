@@ -2,7 +2,7 @@
 import config from "../config/config.index"
 //database
 import { Connection, createConnection } from "mysql"
-import { createTableCommand, insertElementCommand, updateElementCommand } from './mysql.helpers'
+import { createDatabaseCommand, createTableCommand, dropDatabaseCommand, dropTableCommand, insertElementCommand, selectTableExistsCommand, showEntriesFromTableCommand, showTablesFromDatabaseCommand, updateElementCommand, useDatabaseCommand } from './mysql.helpers'
 let connection: Connection
 
 /**
@@ -81,26 +81,32 @@ export const insertElement = async (obj: any) => {
     }
 }
 
-export const updateElement = async (obj: any, uniqueKey: {key: string, value: string}, valueNamePair: {value: any, name: string}) => {
-    const updateCommand = updateElementCommand(obj, uniqueKey, valueNamePair)
+/**
+ *  update element from database using object's properties
+ * @param obj
+ */
+export const updateElement = async (obj: any) => {
+    const updateCommand = updateElementCommand(obj)
     try {
         await execute(updateCommand)
-    } catch(error) {
-        console.log(`error updating object: ${obj}`)
+    } catch (error) {
+        console.log(`error updating object with id: ${obj.id}`)
         throw error
     }
 }
-
 /**
  * Delete database and create new empty database with same name
  */
 export const cleanDB = async () => {
     //delete database
-    await execute(`DROP DATABASE IF EXISTS ${config.mysqlConfig.database};`)
+    const dropDatabase = dropDatabaseCommand(config.mysqlConfig.database)
+    await execute(dropDatabase)
     //create new database with same name
-    await execute(`CREATE DATABASE ${config.mysqlConfig.database};`)
+    const createDatabase = createDatabaseCommand(config.mysqlConfig.database)
+    await execute(createDatabase)
     //set newly created database as database to be used for all queries
-    await execute(`use ${config.mysqlConfig.database};`)
+    const useDatabase = useDatabaseCommand(config.mysqlConfig.database)
+    await execute(useDatabase)
 }
 
 /**
@@ -108,7 +114,8 @@ export const cleanDB = async () => {
  * @returns Array of tables
  */
 export const getAllTablesFromDB = async () => {
-    return await execute(`SHOW TABLES FROM ${config.mysqlConfig.database}`) as Array<unknown> as Array<{ Tables_in_ictheatre: string }>
+    const showTables = showTablesFromDatabaseCommand(config.mysqlConfig.database)
+    return await execute(showTables) as Array<unknown> as Array<{ Tables_in_ictheatre: string }>
 }
 
 /**
@@ -119,7 +126,8 @@ export const getAllTablesFromDB = async () => {
  */
 export const getListOfTableEntries = async (tableName: string) => {
     try {
-        const tableArray = await execute(`SELECT * from ${tableName};`) as Array<unknown> as Array<any>
+        const getListOfTables = showEntriesFromTableCommand(tableName)
+        const tableArray = await execute(getListOfTables) as Array<unknown> as Array<any>
         let newArray = []
         for (const element of tableArray) {
             newArray.push(element)
@@ -136,10 +144,30 @@ export const getListOfTableEntries = async (tableName: string) => {
  * @returns first element of array as arrayRow
  */
 export const getFirstTableElement = async (tableName: string) => {
+    //if table does not exists -> return null
     try {
-        const tableArray = await execute(`SELECT * from ${tableName};`) as Array<unknown>
+        /**
+         * select table exists returns an array with one object similar to:
+         * { EXISTS ( SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_TYPE LIKE 'BASE TABLE' AND TABLE_NAME = 'Company') : 0 }
+         * { EXISTS ( SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_TYPE LIKE 'BASE TABLE' AND TABLE_NAME = 'Company') : 1 }
+         * For this reason we iterate on it through keys rather than write the whole key as it will only be one key which will be true or false
+         */
+        let selectTableExists = selectTableExistsCommand(tableName)
+        const tableExists = await execute(selectTableExists) as Array<any>
+        for (const key in tableExists[0]) if (!tableExists[0][key]) {
+            console.log(`table ${tableName} does not exists in our database`)
+            return null
+        }
+    } catch (error) {
+        console.log(`error checking table exists from ${tableName}`)
+        throw error
+    }
+    //if table exists -> return element
+    try {
+        const showEntriesFromTable = showEntriesFromTableCommand(tableName)
+        const tableArray = await execute(showEntriesFromTable) as Array<unknown>
         return tableArray[0]
-    } catch(error) {
+    } catch (error) {
         console.log(`error getting element from ${tableName}`)
         throw error
     }
@@ -150,8 +178,9 @@ export const getFirstTableElement = async (tableName: string) => {
  */
 export const deleteTableDB = async (tableName: string) => {
     try {
-        await execute(`DROP TABLE IF EXISTS ${tableName};`)
-    } catch(error) {
+        const dropTable = dropTableCommand(tableName)
+        await execute(dropTable)
+    } catch (error) {
         console.log(`error deleting table: ${tableName}`)
         throw error
     }
