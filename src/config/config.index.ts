@@ -14,7 +14,7 @@ const config: IConfig = {
     seedDB: true, //set to false if you don't want to seed the dab
     showConfig: {
         lengthInSeconds: 300, //length of show in seconds
-        updateIntervalInSeconds: 1 //how often do we update companies prices
+        updateIntervalInSeconds: 0.2 //how often do we update companies prices
     }
 }
 
