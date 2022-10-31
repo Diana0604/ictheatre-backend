@@ -8,7 +8,7 @@ export class DatabaseObject {
     id: number
 
     constructor( currentId: number | undefined ) {
-        if (currentId) this.id = currentId
+        if (currentId != undefined) this.id = currentId
         else {
             this.id = idGenerator
             idGenerator++
