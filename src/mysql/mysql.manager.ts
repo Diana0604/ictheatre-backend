@@ -1,5 +1,5 @@
 //database
-import { insertElement, getAllTablesFromDB, getListOfTableEntries, deleteTableDB, getFirstTableElement, getElementById } from './mysql.wrapper'
+import { insertElement, getAllTablesFromDB, getListOfTableEntries, getFirstTableElement, getElementById, updateElement } from './mysql.wrapper'
 //classes
 import { Company } from '../objects/Company'
 //config and fixtures
@@ -90,11 +90,7 @@ export const setShowStarted = async () => {
     try {
         const showStatus = await getShowStatus()
         showStatus.isPlaying = true
-
-        //delete current table
-        await deleteTableDB(ShowStatus.name)
-        //insert new element
-        await insertElement(showStatus)
+        await updateElement(showStatus)
     } catch (error) {
         throw error
     }
@@ -107,11 +103,7 @@ export const setShowPaused = async () => {
     try {
         const showStatus = await getShowStatus()
         showStatus.isPlaying = false
-
-        //delete current table
-        await deleteTableDB(ShowStatus.name)
-        //insert new element
-        await insertElement(showStatus)
+        await updateElement(showStatus)
     } catch (error) {
         throw error
     }
@@ -125,11 +117,7 @@ export const addToTimerInSeconds = async (seconds: number) => {
     try {
         let showStatus = await getShowStatus()
         showStatus.timeSinceStartup = showStatus.timeSinceStartup + seconds
-
-        //delete current table
-        await deleteTableDB(ShowStatus.name)
-        //insert new element
-        await insertElement(showStatus)
+        await updateElement(showStatus)
     } catch (error) {
         throw error
     }
