@@ -1,5 +1,5 @@
 //database
-import { insertElement, getAllTablesFromDB, getListOfTableEntries, getFirstTableElement, getElementById, updateElement } from './mysql.wrapper'
+import { insertElement, getAllTablesFromDB, getListOfTableEntries, getFirstTableElement, getElementById, updateElement, cleanDB } from './mysql.wrapper'
 //classes
 import { Company } from '../objects/Company'
 //config and fixtures
@@ -14,6 +14,7 @@ import { ICompanyProperties, IShowStatus } from '../types/types.mysql'
  * show tables at end
  */
 export const seedDB = async () => {
+    await cleanDB()
     //setup show status
     const showStatus = new ShowStatus({ timeSinceStartup: 0, isPlaying: false })
     try {
