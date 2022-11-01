@@ -159,6 +159,10 @@ export const getCompanyInformation = async (companyId: string) => {
     return await getElementById(companyId, Company.name)
 }
 
+/**
+ * Get information for player company
+ * @returns player company object
+ */
 export const getPlayerCompanyInformation = async () => {
     return await getFirstTableElement(PlayerCompany.name)
 }
