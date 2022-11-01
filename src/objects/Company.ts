@@ -1,8 +1,6 @@
 import { ICompanyProperties } from '../types/types.mysql'
 import { DatabaseObject } from './DatabaseObject'
 
-let companyId = 0
-
 /**
  * Company class
  */
@@ -22,15 +20,5 @@ export class Company extends DatabaseObject {
             this.currentPricePerShare = props.initPricePerShare
         else this.currentPricePerShare = props.currentPricePerShare
         this.finalPricePerShare = props.finalPricePerShare
-    }
-}
-
-/**
- * Player company class. Not sure what more it will have from Player.
- */
-class PlayerCompany extends Company {
-
-    constructor(basicProps: ICompanyProperties) {
-        super(basicProps)
     }
 }
