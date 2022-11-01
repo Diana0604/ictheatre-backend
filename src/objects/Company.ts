@@ -1,4 +1,4 @@
-import { ICompanyProperties } from '../types/types.mysql'
+import { ICompanyProperties } from '../types/types.objects'
 import { DatabaseObject } from './DatabaseObject'
 
 /**

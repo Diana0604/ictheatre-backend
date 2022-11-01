@@ -2,10 +2,12 @@
 import { insertElement, getAllTablesFromDB, getListOfTableEntries, getFirstTableElement, getElementById, updateElement, cleanDB } from './mysql.wrapper'
 //classes
 import { Company } from '../objects/Company'
+import { PlayerCompany } from '../objects/PlayerCompany'
+import { ShowStatus } from '../objects/ShowStatus'
+import { ICompanyProperties, IShowStatus } from '../types/types.objects'
 //config and fixtures
 import companies from '../fixtures/companies'
-import { ShowStatus } from '../objects/ShowStatus'
-import { ICompanyProperties, IShowStatus } from '../types/types.mysql'
+import playerCompanyFixture from '../fixtures/playerCompany'
 
 /**
  * seed database with:
@@ -20,6 +22,14 @@ export const seedDB = async () => {
     try {
         await (insertElement(showStatus))
     } catch (error) {
+        throw error
+    }
+
+    //setup player company
+    const playerCompany = new PlayerCompany(playerCompanyFixture)
+    try {
+        await insertElement(playerCompany)
+    } catch(error) {
         throw error
     }
 

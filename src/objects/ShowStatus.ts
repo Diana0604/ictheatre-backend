@@ -1,4 +1,4 @@
-import { IShowStatus } from "../types/types.mysql"
+import { IShowStatus } from "../types/types.objects"
 import { DatabaseObject } from './DatabaseObject'
 
 /**

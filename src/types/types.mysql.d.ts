@@ -17,24 +17,3 @@ export interface IDatabaseConfig {
         encrypt: true
     }
 }
-
-/**
- * Properties to be passed in company constructor
- */
-export interface ICompanyProperties {
-    id?: number,
-    name: string,
-    description: string,
-    initPricePerShare: number, //price at init of show
-    finalPricePerShare: number, //price at end of show
-    currentPricePerShare?: number //price right now
-}
-
-/**
- * Timer of show development
- */
-export interface IShowStatus {
-    id?: number
-    timeSinceStartup: number
-    isPlaying: boolean
-}
