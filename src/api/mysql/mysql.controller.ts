@@ -2,7 +2,7 @@
 import { Request, Response } from 'express'
 //database
 import { cleanDB } from '../../mysql/mysql.wrapper'
-import { getAllCompanies, getCompanyInformation, getShowStatus, seedDB } from '../../mysql/mysql.manager'
+import { getAllCompanies, getCompanyInformation, getShowStatus, getPlayerCompanyInformation, seedDB } from '../../mysql/mysql.manager'
 
 
 /**
@@ -54,11 +54,26 @@ export const getCompany = async(req: Request, res: Response) => {
   const companyId = req.params.id
   try {
     const companyInformation = await getCompanyInformation(companyId)
-    console.log(companyInformation)
     res.status(200).json(companyInformation)
   } catch(error) {
     res.status(500).json({message: 'error getting company information - check server logs'})
     console.log(`error getting company information for id: ${companyId}`)
+    console.log(error)
+  }
+}
+
+/**
+ * Get information for player company
+ * @param req
+ * @param res
+ */
+export const getPlayerCompany = async(req: Request, res: Response) => {
+  try {
+    const playerCompany = await getPlayerCompanyInformation()
+    res.status(200).json(playerCompany)
+  } catch(error) {
+    res.status(500).json({message: 'error getting player company information - check server logs'})
+    console.log('error getting player company information')
     console.log(error)
   }
 }

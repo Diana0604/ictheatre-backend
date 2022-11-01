@@ -150,6 +150,15 @@ export const getAllCompanies = async () => {
     return allCompaniesList
 }
 
+/**
+ * Get information for just one company
+ * @param companyId id of company you wish to retreive info for
+ * @returns company object
+ */
 export const getCompanyInformation = async (companyId: string) => {
     return await getElementById(companyId, Company.name)
+}
+
+export const getPlayerCompanyInformation = async () => {
+    return await getFirstTableElement(PlayerCompany.name)
 }
