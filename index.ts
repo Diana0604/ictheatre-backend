@@ -1,8 +1,10 @@
 import init from './init'
 import express from 'express'
 import routes from './src/routes'
+import cors from 'cors'
 
 const app = express()
+app.use(cors())
 
 //init database
 init().then(() => {
