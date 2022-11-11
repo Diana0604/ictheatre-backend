@@ -10,7 +10,6 @@ import {
   seedDB,
   editCompanyInformation,
 } from "../../mysql/mysql.manager";
-import playerCompany from "../../fixtures/playerCompany";
 import { Company } from "../../objects/Company";
 
 /**
