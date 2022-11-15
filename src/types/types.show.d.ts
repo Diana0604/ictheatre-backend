@@ -1,4 +1,4 @@
 interface IShowConfig {
-    lengthInSeconds: number,
-    updateIntervalInSeconds: number
+  lengthInSeconds: number;
+  updateIntervalInSeconds: number;
 }

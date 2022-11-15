@@ -117,6 +117,11 @@ export const editCompany = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Request to delete company given id
+ * @param req
+ * @param res
+ */
 export const deleteCompany = async (req: Request, res: Response) => {
   try {
     await deleteCompanyFromDatabase(req.params.id);
