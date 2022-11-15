@@ -7,6 +7,7 @@ import {
   getElementById,
   updateElement,
   cleanDB,
+  deleteElementById,
 } from "./mysql.wrapper";
 //classes
 import { Company } from "../objects/Company";
@@ -174,6 +175,22 @@ export const getPlayerCompanyInformation = async () => {
   return await getFirstTableElement(PlayerCompany.name);
 };
 
-export const editCompanyInformation = async (newCompany: ICompanyProperties ) => {
+/**
+ * Update company info
+ * @param newCompany
+ * @returns
+ */
+export const editCompanyInformation = async (
+  newCompany: ICompanyProperties
+) => {
   return await updateElement(new Company(newCompany));
+};
+
+/**
+ * Delete a company with given id from the database
+ * @param id 
+ * @returns 
+ */
+export const deleteCompanyFromDatabase = async (id: string) => {
+  return await deleteElementById(id, Company.name);
 };

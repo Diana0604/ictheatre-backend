@@ -2,7 +2,7 @@
 import config from "../config/config.index"
 //database
 import { Connection, createConnection } from "mysql"
-import { createDatabaseCommand, createTableCommand, dropDatabaseCommand, dropTableCommand, insertElementCommand, selectByIdCommand, selectTableExistsCommand, showEntriesFromTableCommand, showTablesFromDatabaseCommand, updateElementCommand, useDatabaseCommand } from './mysql.helpers'
+import { createDatabaseCommand, createTableCommand, deleteByIdCommand, deleteElementCommand, dropDatabaseCommand, dropTableCommand, insertElementCommand, selectByIdCommand, selectTableExistsCommand, showEntriesFromTableCommand, showTablesFromDatabaseCommand, updateElementCommand, useDatabaseCommand } from './mysql.helpers'
 let connection: Connection
 
 /**
@@ -92,6 +92,19 @@ export const updateElement = async (obj: any) => {
     } catch (error) {
         console.log(`error updating object with id: ${obj.id}`)
         throw error
+    }
+}
+
+/**
+ * Delete object - given all description from db
+ * @param obj to be deleted
+ */
+export const deleteElement = async (obj: any) => {
+    const deleteCommand = deleteElementCommand(obj)
+    try {
+        await execute(deleteCommand)
+    } catch (error) {
+        console.log(`error trying to delete object with id: ${obj.id}`)
     }
 }
 /**
@@ -216,6 +229,22 @@ export const deleteTableDB = async (tableName: string) => {
         const selectById = selectByIdCommand(id, tableName)
         const tableArray = await execute(selectById) as Array<unknown>
         return tableArray[0]
+    } catch (error) {
+        console.log(`error getting element from ${tableName}`)
+        throw error
+    }
+}
+
+/**
+ * Delete element by id
+ * @param id id of element to get
+ * @param tableName name of table that we want first element of
+ * @returns element with given id or null if table doesn't exist
+ */
+ export const deleteElementById = async (id: string, tableName: string) => {
+    try {
+        const deleteById = deleteByIdCommand(id, tableName)
+        await execute(deleteById) as Array<unknown>
     } catch (error) {
         console.log(`error getting element from ${tableName}`)
         throw error

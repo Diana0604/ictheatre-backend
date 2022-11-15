@@ -1,7 +1,7 @@
 //types
 import { Request, Response } from "express";
 //database
-import { cleanDB } from "../../mysql/mysql.wrapper";
+import { cleanDB, deleteElementById } from "../../mysql/mysql.wrapper";
 import {
   getAllCompanies,
   getCompanyInformation,
@@ -9,6 +9,7 @@ import {
   getPlayerCompanyInformation,
   seedDB,
   editCompanyInformation,
+  deleteCompanyFromDatabase,
 } from "../../mysql/mysql.manager";
 import { Company } from "../../objects/Company";
 
@@ -112,6 +113,18 @@ export const editCompany = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ message: `error editting company ${req.params.id}` });
+    console.log(error);
+  }
+};
+
+export const deleteCompany = async (req: Request, res: Response) => {
+  try {
+    await deleteCompanyFromDatabase(req.params.id);
+    res.status(200).json({ message: `company deleted!` });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: `error deleting company ${req.params.id}` });
     console.log(error);
   }
 };

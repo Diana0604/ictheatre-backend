@@ -10,18 +10,18 @@
  */
 const javascriptTypeToMySqlType = (type: string) => {
   switch (type) {
-    case 'string': {
-      return 'TEXT'
+    case "string": {
+      return "TEXT";
     }
-    case 'number': {
-      return 'DOUBLE'
+    case "number": {
+      return "DOUBLE";
     }
-    case 'boolean': {
-      return 'BOOLEAN'
+    case "boolean": {
+      return "BOOLEAN";
     }
   }
-  throw new Error('unknown type')
-}
+  throw new Error("unknown type");
+};
 
 /**
  * Check if javascript type can be translated to mysql type
@@ -29,9 +29,9 @@ const javascriptTypeToMySqlType = (type: string) => {
  * @returns true or false
  */
 export const canBecomeMysqlType = (type: string) => {
-  if (type != 'string' && type != 'number' && type != 'boolean') return false
-  return true
-}
+  if (type != "string" && type != "number" && type != "boolean") return false;
+  return true;
+};
 
 /**
  * Given a javascript element, transform to sql element
@@ -43,18 +43,18 @@ export const canBecomeMysqlType = (type: string) => {
  */
 const javascriptValueToMySqlValue = (element: any) => {
   switch (typeof element) {
-    case 'string': {
-      return `'${element}'`
+    case "string": {
+      return `'${element}'`;
     }
-    case 'number': {
-      return `'${element}'`
+    case "number": {
+      return `'${element}'`;
     }
-    case 'boolean': {
-      return element ? `TRUE` : `FALSE`
+    case "boolean": {
+      return element ? `TRUE` : `FALSE`;
     }
   }
-  throw new Error('unknown type')
-}
+  throw new Error("unknown type");
+};
 
 /**
  * Create a create table command from a given object.
@@ -63,15 +63,17 @@ const javascriptValueToMySqlValue = (element: any) => {
  * @returns string of command
  */
 export const createTableCommand = (obj: any) => {
-  let createTableCommand = `CREATE TABLE IF NOT EXISTS ${obj.constructor.name} (`
+  let createTableCommand = `CREATE TABLE IF NOT EXISTS ${obj.constructor.name} (`;
   for (const key in obj) {
-    if (canBecomeMysqlType(typeof (obj[key])))
-      createTableCommand = createTableCommand + `${key} ${javascriptTypeToMySqlType(typeof (obj[key]))}, `
+    if (canBecomeMysqlType(typeof obj[key]))
+      createTableCommand =
+        createTableCommand +
+        `${key} ${javascriptTypeToMySqlType(typeof obj[key])}, `;
   }
-  createTableCommand = createTableCommand.slice(0, -2)
-  createTableCommand = createTableCommand + `);`
-  return createTableCommand
-}
+  createTableCommand = createTableCommand.slice(0, -2);
+  createTableCommand = createTableCommand + `);`;
+  return createTableCommand;
+};
 
 /**
  * Insert element to table of the same name as its class
@@ -79,23 +81,24 @@ export const createTableCommand = (obj: any) => {
  * @returns string of command
  */
 export const insertElementCommand = (obj: any) => {
-  let insertElementCommand = `INSERT INTO ${obj.constructor.name} (`
+  let insertElementCommand = `INSERT INTO ${obj.constructor.name} (`;
   //first list all the table titles
   for (const key in obj) {
     if (canBecomeMysqlType(typeof obj[key]))
-      insertElementCommand = insertElementCommand + `${key}, `
+      insertElementCommand = insertElementCommand + `${key}, `;
   }
-  insertElementCommand = insertElementCommand.slice(0, -2)
+  insertElementCommand = insertElementCommand.slice(0, -2);
   //then specify values
-  insertElementCommand = insertElementCommand + ') VALUES ('
+  insertElementCommand = insertElementCommand + ") VALUES (";
   for (const key in obj) {
     if (canBecomeMysqlType(typeof obj[key]))
-      insertElementCommand = insertElementCommand + `${javascriptValueToMySqlValue(obj[key])}, `
+      insertElementCommand =
+        insertElementCommand + `${javascriptValueToMySqlValue(obj[key])}, `;
   }
-  insertElementCommand = insertElementCommand.slice(0, -2)
-  insertElementCommand = insertElementCommand + ');'
-  return insertElementCommand
-}
+  insertElementCommand = insertElementCommand.slice(0, -2);
+  insertElementCommand = insertElementCommand + ");";
+  return insertElementCommand;
+};
 
 /**
  * Update an element
@@ -103,17 +106,22 @@ export const insertElementCommand = (obj: any) => {
  * @returns
  */
 export const updateElementCommand = (obj: any) => {
-
-  let updateElementCommand = `UPDATE ${obj.constructor.name} set `
+  let updateElementCommand = `UPDATE ${obj.constructor.name} set `;
   for (const key in obj) {
     if (canBecomeMysqlType(typeof obj[key]))
-      updateElementCommand = updateElementCommand + `${key}=${javascriptValueToMySqlValue(obj[key])}, `
+      updateElementCommand =
+        updateElementCommand +
+        `${key}=${javascriptValueToMySqlValue(obj[key])}, `;
   }
-  updateElementCommand = updateElementCommand.slice(0, -2)
+  updateElementCommand = updateElementCommand.slice(0, -2);
 
-  updateElementCommand = updateElementCommand + `where id=${obj.id}`
-  return updateElementCommand
-}
+  updateElementCommand = updateElementCommand + `where id=${obj.id}`;
+  return updateElementCommand;
+};
+
+export const deleteElementCommand = (obj: any) => {
+  return `DELETE FROM ${obj.constructor.name} WHERE id=${obj.id}`;
+};
 
 /**
  * Returns string for Mysql command to drop a database
@@ -121,8 +129,8 @@ export const updateElementCommand = (obj: any) => {
  * @returns
  */
 export const dropDatabaseCommand = (database: string) => {
-  return `DROP DATABASE IF EXISTS ${database};`
-}
+  return `DROP DATABASE IF EXISTS ${database};`;
+};
 
 /**
  * Returns string for Mysql command to create a database
@@ -130,8 +138,8 @@ export const dropDatabaseCommand = (database: string) => {
  * @returns
  */
 export const createDatabaseCommand = (database: string) => {
-  return `CREATE DATABASE ${database};`
-}
+  return `CREATE DATABASE ${database};`;
+};
 
 /**
  * Returns string for Mysql command to use a database
@@ -139,8 +147,8 @@ export const createDatabaseCommand = (database: string) => {
  * @returns
  */
 export const useDatabaseCommand = (database: string) => {
-  return `use ${database};`
-}
+  return `use ${database};`;
+};
 
 /**
  * Returns string for Mysql command to show all the tables from a database
@@ -148,8 +156,8 @@ export const useDatabaseCommand = (database: string) => {
  * @returns
  */
 export const showTablesFromDatabaseCommand = (database: string) => {
-  return `SHOW TABLES FROM ${database}`
-}
+  return `SHOW TABLES FROM ${database}`;
+};
 
 /**
  * Returns string for Mysql command to show all entries in one table
@@ -157,8 +165,8 @@ export const showTablesFromDatabaseCommand = (database: string) => {
  * @returns
  */
 export const showEntriesFromTableCommand = (table: string) => {
-  return `SELECT * from ${table};`
-}
+  return `SELECT * from ${table};`;
+};
 
 /**
  * Returns string for Mysql command to check if table exists
@@ -166,8 +174,8 @@ export const showEntriesFromTableCommand = (table: string) => {
  * @returns
  */
 export const selectTableExistsCommand = (table: string) => {
-  return `SELECT EXISTS ( SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_TYPE LIKE 'BASE TABLE' AND TABLE_NAME = '${table}');`
-}
+  return `SELECT EXISTS ( SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_TYPE LIKE 'BASE TABLE' AND TABLE_NAME = '${table}');`;
+};
 
 /**
  * Returns string for Mysql command to drop table from databas
@@ -175,8 +183,8 @@ export const selectTableExistsCommand = (table: string) => {
  * @returns
  */
 export const dropTableCommand = (table: string) => {
-  return `DROP TABLE IF EXISTS ${table};`
-}
+  return `DROP TABLE IF EXISTS ${table};`;
+};
 
 /**
  * Returns string for Mysql command to select element given an id and a table
@@ -185,5 +193,15 @@ export const dropTableCommand = (table: string) => {
  * @returns
  */
 export const selectByIdCommand = (id: string, table: string) => {
-  return `SELECT * FROM ${table} WHERE id=${id};`
-}
+  return `SELECT * FROM ${table} WHERE id=${id};`;
+};
+
+/**
+ * Delete company given an id
+ * @param id
+ * @param table
+ * @returns
+ */
+export const deleteByIdCommand = (id: string, table: string) => {
+  return `DELETE FROM ${table} WHERE id=${id}`;
+};
