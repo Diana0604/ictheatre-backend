@@ -14,9 +14,13 @@ import { Company } from "../objects/Company";
 import { PlayerCompany } from "../objects/PlayerCompany";
 import { ShowStatus } from "../objects/ShowStatus";
 import { ICompanyProperties, IShowStatus } from "../types/types.objects";
+import { Seller } from "../objects/Seller";
+import { ShareBundle } from "../objects/ShareBundle";
 //config and fixtures
 import companies from "../fixtures/companies";
 import playerCompanyFixture from "../fixtures/playerCompany";
+import sellers from "../fixtures/sellers";
+import shareBundles from "../fixtures/shareBundles";
 
 /**
  * seed database with:
@@ -28,28 +32,28 @@ export const seedDB = async () => {
   await cleanDB();
   //setup show status
   const showStatus = new ShowStatus({ timeSinceStartup: 0, isPlaying: false });
-  try {
-    await insertElement(showStatus);
-  } catch (error) {
-    throw error;
-  }
+  await insertElement(showStatus);
 
   //setup player company
   const playerCompany = new PlayerCompany(playerCompanyFixture);
-  try {
-    await insertElement(playerCompany);
-  } catch (error) {
-    throw error;
-  }
+  await insertElement(playerCompany);
 
   //loop through fixtures and add to database
   for (const company of companies) {
     const newCompany = new Company(company);
-    try {
-      await insertElement(newCompany);
-    } catch (error) {
-      throw error;
-    }
+    await insertElement(newCompany);
+  }
+
+  //loop through sellers and add to database
+  for (const seller of sellers) {
+    const newSeller = new Seller(seller);
+    await insertElement(newSeller);
+  }
+
+  //loop through shares and add to database
+  for (const shareBundle of shareBundles) {
+    const newBundle = new ShareBundle(shareBundle);
+    await insertElement(newBundle);
   }
   console.log("database seeded");
 
@@ -188,8 +192,8 @@ export const editCompanyInformation = async (
 
 /**
  * Delete a company with given id from the database
- * @param id 
- * @returns 
+ * @param id
+ * @returns
  */
 export const deleteCompanyFromDatabase = async (id: string) => {
   return await deleteElementById(id, Company.name);

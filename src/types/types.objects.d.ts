@@ -18,8 +18,15 @@ export interface IPlayerCompanyProperties {
   name: string;
   pricePerShare: number; //price at init of show
   publicRelationsIndex: number; //Public Relations index
-  shares: [IShare]; //shares owned by the company
   liquidAssets: number; //how much money does the company have
+}
+
+/**
+ * Properties to be passed in the seller constructor
+ */
+export interface ISellerProperties {
+  id?: number;
+  name: string;
 }
 
 /**
@@ -31,11 +38,16 @@ export interface IShowStatus {
   isPlaying: boolean;
 }
 
+export interface ISeller {
+  id?: number;
+}
+
 /**
  * one single item of company shares
  */
-export interface IShare {
+export type IShareBundle = {
   id?: number;
   ownerId: number;
   companyId: number;
-}
+  quantity: number;
+};
