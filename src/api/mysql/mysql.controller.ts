@@ -1,7 +1,7 @@
 //types
 import { Request, Response } from "express";
 //database
-import { cleanDB, deleteElementById } from "../../mysql/mysql.wrapper";
+import { cleanDB } from "../../mysql/mysql.wrapper";
 import {
   getAllCompanies,
   getCompanyInformation,
@@ -10,8 +10,13 @@ import {
   seedDB,
   editCompanyInformation,
   deleteCompanyFromDatabase,
+  getAllSellers,
+  editSellerInformation,
+  editShareBundleInformation,
 } from "../../mysql/mysql.manager";
 import { Company } from "../../objects/Company";
+import { Seller } from "../../objects/Seller";
+import { ShareBundle } from "../../objects/ShareBundle";
 
 /**
  * Restart database:
@@ -130,6 +135,61 @@ export const deleteCompany = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ message: `error deleting company ${req.params.id}` });
+    console.log(error);
+  }
+};
+
+/**
+ * Get list of sellers and their shares information
+ * @param _req
+ * @param res
+ */
+export const getSellersList = async (_req: Request, res: Response) => {
+  try {
+    const sellersList = await getAllSellers();
+    res.status(200).json(sellersList);
+  } catch (error) {
+    res.status(500).json({ message: `error getting sellers list` });
+    console.log(error);
+  }
+};
+
+/**
+ * Request to edit seller given id
+ * @param req
+ * @param res
+ */
+export const editSeller = async (req: Request, res: Response) => {
+  try {
+    const newSeller = req.query;
+    newSeller.id = req.params.id;
+    const seller = await editSellerInformation(newSeller as unknown as Seller);
+    res.status(200).json(seller);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: `error editing seller ${req.params.id}` });
+    console.log(error);
+  }
+};
+
+/**
+ * Request to edit share bundle given an id
+ * @param req
+ * @param res
+ */
+export const editShareBundle = async (req: Request, res: Response) => {
+  try {
+    const newShareBundle = req.query;
+    newShareBundle.id = req.params.id;
+    const shareBundle = await editShareBundleInformation(
+      newShareBundle as unknown as ShareBundle
+    );
+    res.status(200).json(shareBundle);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: `error editing share bundle ${req.params.id}` });
     console.log(error);
   }
 };

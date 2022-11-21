@@ -13,7 +13,12 @@ import {
 import { Company } from "../objects/Company";
 import { PlayerCompany } from "../objects/PlayerCompany";
 import { ShowStatus } from "../objects/ShowStatus";
-import { ICompanyProperties, IShowStatus } from "../types/types.objects";
+import {
+  ICompanyProperties,
+  ISellerProperties,
+  IShareBundle,
+  IShowStatus,
+} from "../types/types.objects";
 import { Seller } from "../objects/Seller";
 import { ShareBundle } from "../objects/ShareBundle";
 //config and fixtures
@@ -38,23 +43,49 @@ export const seedDB = async () => {
   const playerCompany = new PlayerCompany(playerCompanyFixture);
   await insertElement(playerCompany);
 
+  const companiesArray = [];
   //loop through fixtures and add to database
   for (const company of companies) {
     const newCompany = new Company(company);
     await insertElement(newCompany);
+    companiesArray.push(newCompany);
   }
 
+  const sellersArray = [];
   //loop through sellers and add to database
   for (const seller of sellers) {
     const newSeller = new Seller(seller);
     await insertElement(newSeller);
+    sellersArray.push(newSeller);
   }
 
-  //loop through shares and add to database
-  for (const shareBundle of shareBundles) {
-    const newBundle = new ShareBundle(shareBundle);
-    await insertElement(newBundle);
+  //share bundles:
+  // Loop through companies and sellers
+  for (const company of companiesArray) {
+    for (const seller of sellersArray) {
+      // If bundle with those ids exists in fixtures -> insert that bundle
+      let foundPair = false;
+      for (const shareBundle of shareBundles) {
+        if (
+          shareBundle.ownerId === seller.id &&
+          shareBundle.companyId === company.id
+        ) {
+          const newShareBundle = new ShareBundle(shareBundle);
+          await insertElement(newShareBundle);
+          foundPair = true;
+        }
+      }
+      if (foundPair) continue;
+      // Else -> insert empty bundle
+      const emptyBundle = new ShareBundle({
+        ownerId: seller.id,
+        companyId: company.id,
+        quantity: 0,
+      });
+      await insertElement(emptyBundle);
+    }
   }
+
   console.log("database seeded");
 
   //display all tables that have been created
@@ -197,4 +228,35 @@ export const editCompanyInformation = async (
  */
 export const deleteCompanyFromDatabase = async (id: string) => {
   return await deleteElementById(id, Company.name);
+};
+
+/**
+ *
+ * @returns list of all companies from database
+ */
+export const getAllSellers = async () => {
+  const sellersList = await getListOfTableEntries(Seller.name);
+  const shareBundlesList = await getListOfTableEntries(ShareBundle.name);
+  let sellersObjectList: Seller[] = [];
+  let shareBundlesObjectList: ShareBundle[] = [];
+  //convert database objects into Seller / ShareBundle objects
+  for (const element of sellersList) {
+    const seller = new Seller(element as ISellerProperties);
+    sellersObjectList.push(seller);
+  }
+  for (const element of shareBundlesList) {
+    const bundle = new ShareBundle(element as IShareBundle);
+    shareBundlesObjectList.push(bundle);
+  }
+  return { sellers: sellersObjectList, shareBundles: shareBundlesObjectList };
+};
+
+export const editSellerInformation = async (newSeller: ISellerProperties) => {
+  return await updateElement(new Seller(newSeller));
+};
+
+export const editShareBundleInformation = async (
+  newShareBundle: IShareBundle
+) => {
+  return await updateElement(new ShareBundle(newShareBundle));
 };
