@@ -8,7 +8,6 @@ import {
   updateElement,
   cleanDB,
   deleteElementById,
-  deleteElement,
 } from "./mysql.wrapper";
 //classes
 import { Company } from "../objects/Company";
