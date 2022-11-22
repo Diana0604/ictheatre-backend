@@ -46,8 +46,15 @@ export interface ISeller {
  * one single item of company shares
  */
 export type IShareBundle = {
-  id?: number;
   ownerId: number;
+  companyId: number;
+  quantity: number;
+};
+
+/**
+ * shares owned by the player
+ */
+export type IPlayerShareBundleProps = {
   companyId: number;
   quantity: number;
 };

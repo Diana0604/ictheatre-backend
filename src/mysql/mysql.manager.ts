@@ -26,6 +26,7 @@ import companies from "../fixtures/companies";
 import playerCompanyFixture from "../fixtures/playerCompany";
 import sellers from "../fixtures/sellers";
 import shareBundles from "../fixtures/shareBundles";
+import { PlayerShareBundle } from "../objects/PlayerShareBundle";
 
 /**
  * seed database with:
@@ -62,6 +63,12 @@ export const seedDB = async () => {
   //share bundles:
   // Loop through companies and sellers
   for (const company of companiesArray) {
+    // Create empty sharebundle for player
+    const emptyPlayerBundle = new PlayerShareBundle({
+      companyId: company.id,
+      quantity: 0,
+    });
+    insertElement(emptyPlayerBundle);
     for (const seller of sellersArray) {
       // If bundle with those ids exists in fixtures -> insert that bundle
       let foundPair = false;
