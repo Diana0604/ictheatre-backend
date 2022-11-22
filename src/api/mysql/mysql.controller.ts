@@ -13,6 +13,7 @@ import {
   getAllSellers,
   editSellerInformation,
   editShareBundleInformation,
+  deleteSellerFromDatabase,
 } from "../../mysql/mysql.manager";
 import { Company } from "../../objects/Company";
 import { Seller } from "../../objects/Seller";
@@ -166,9 +167,7 @@ export const editSeller = async (req: Request, res: Response) => {
     const seller = await editSellerInformation(newSeller as unknown as Seller);
     res.status(200).json(seller);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: `error editing seller ${req.params.id}` });
+    res.status(500).json({ message: `error editing seller ${req.params.id}` });
     console.log(error);
   }
 };
@@ -190,6 +189,21 @@ export const editShareBundle = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ message: `error editing share bundle ${req.params.id}` });
+    console.log(error);
+  }
+};
+
+/**
+ * Request to delete a seller and their shares
+ * @param req
+ * @param res
+ */
+export const deleteSeller = async (req: Request, res: Response) => {
+  try {
+    const seller = await deleteSellerFromDatabase(req.params.id);
+    res.status(200).json(seller);
+  } catch (error) {
+    res.status(500).json({ message: `error editing seller ${req.params.id}` });
     console.log(error);
   }
 };

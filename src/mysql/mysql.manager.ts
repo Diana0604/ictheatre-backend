@@ -8,6 +8,7 @@ import {
   updateElement,
   cleanDB,
   deleteElementById,
+  deleteElement,
 } from "./mysql.wrapper";
 //classes
 import { Company } from "../objects/Company";
@@ -251,12 +252,38 @@ export const getAllSellers = async () => {
   return { sellers: sellersObjectList, shareBundles: shareBundlesObjectList };
 };
 
+/**
+ * edit seller's information (just name, no bundles)
+ * @param newSeller
+ * @returns
+ */
 export const editSellerInformation = async (newSeller: ISellerProperties) => {
   return await updateElement(new Seller(newSeller));
 };
 
+/**
+ * edit share bundles information
+ * @param newShareBundle
+ * @returns
+ */
 export const editShareBundleInformation = async (
   newShareBundle: IShareBundle
 ) => {
   return await updateElement(new ShareBundle(newShareBundle));
+};
+
+/**
+ * delete seller and all bundles associated to them from the database
+ * @param sellerId id of the seller to delete
+ */
+export const deleteSellerFromDatabase = async (sellerId: string) => {
+  await deleteElementById(sellerId, Seller.name);
+  const companies = await getAllCompanies();
+  for (const company of companies) {
+    const shareBundleId = (sellerId as unknown as number) * company.id;
+    await deleteElementById(
+      shareBundleId as unknown as string,
+      ShareBundle.name
+    );
+  }
 };
