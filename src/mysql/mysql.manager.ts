@@ -229,12 +229,17 @@ export const editCompanyInformation = async (
 };
 
 /**
- * Delete a company with given id from the database
+ * Delete a company with given id from the database and all sharebundles associated with it
  * @param id
  * @returns
  */
 export const deleteCompanyFromDatabase = async (id: string) => {
-  return await deleteElementById(id, Company.name);
+  await deleteElementById(id, Company.name);
+  const allSellers = await getAllSellers();
+  for (const seller of allSellers.sellers) {
+    const shareBundleId = seller.id * (id as unknown as number);
+    deleteElementById(shareBundleId as unknown as string, ShareBundle.name);
+  }
 };
 
 /**
