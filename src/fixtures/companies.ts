@@ -5,6 +5,7 @@ export default [
     initPricePerShare: 141.92,
     finalPricePerShare: 106.96,
     id: 200,
+    floatingShares: 0,
   },
   {
     name: "Edgerley Ltd",
@@ -13,6 +14,7 @@ export default [
     initPricePerShare: 95.97,
     finalPricePerShare: 64.05,
     id: 201,
+    floatingShares: 0,
   },
   {
     name: "LOL",
@@ -21,6 +23,7 @@ export default [
     initPricePerShare: 172.57,
     finalPricePerShare: 157.85,
     id: 202,
+    floatingShares: 0,
   },
   {
     name: "Frack Yeah!",
@@ -29,6 +32,7 @@ export default [
     initPricePerShare: 145.89,
     finalPricePerShare: 104.86,
     id: 203,
+    floatingShares: 0,
   },
   {
     name: "BBL",
@@ -37,6 +41,7 @@ export default [
     initPricePerShare: 59.38,
     finalPricePerShare: 58.05,
     id: 204,
+    floatingShares: 0,
   },
   {
     name: "World Trade Fund",
@@ -45,6 +50,7 @@ export default [
     initPricePerShare: 113.14,
     finalPricePerShare: 130.95,
     id: 205,
+    floatingShares: 0,
   },
   {
     name: "Xerox",
@@ -53,6 +59,7 @@ export default [
     initPricePerShare: 87.03,
     finalPricePerShare: 57.5,
     id: 206,
+    floatingShares: 0
   },
   {
     name: "Enron",
@@ -60,6 +67,7 @@ export default [
     initPricePerShare: 136.78,
     finalPricePerShare: 136.78,
     id: 207,
+    floatingShares: 0,
   },
   {
     name: "Google",
@@ -67,6 +75,7 @@ export default [
     initPricePerShare: 172.44,
     finalPricePerShare: 180.27,
     id: 208,
+    floatingShares: 0
   },
   {
     name: "Apple",
@@ -75,5 +84,6 @@ export default [
     initPricePerShare: 164.83,
     finalPricePerShare: 189.71,
     id: 209,
+    floatingShares: 0,
   },
 ];

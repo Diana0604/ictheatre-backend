@@ -8,6 +8,7 @@ export interface ICompanyProperties {
   initPricePerShare: number; //price at init of show
   finalPricePerShare: number; //price at end of show
   currentPricePerShare?: number; //price right now
+  floatingShares: number; //shares not owned by anyone atm
 }
 
 /**

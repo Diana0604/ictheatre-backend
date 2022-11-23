@@ -10,6 +10,7 @@ export class Company extends DatabaseObject {
     initPricePerShare: number
     currentPricePerShare: number
     finalPricePerShare: number
+    floatingShares: number
 
     constructor(props: ICompanyProperties) {
         super(props.id)
@@ -20,5 +21,6 @@ export class Company extends DatabaseObject {
             this.currentPricePerShare = props.initPricePerShare
         else this.currentPricePerShare = props.currentPricePerShare
         this.finalPricePerShare = props.finalPricePerShare
+        this.floatingShares = props.floatingShares
     }
 }
