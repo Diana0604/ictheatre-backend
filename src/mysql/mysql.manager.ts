@@ -346,3 +346,55 @@ export const transferSharesOwnershipToPlayer = async (
   await updateElement(playerBundle);
   await updateElement(sellerShareBundle);
 };
+
+/**
+ * get player shares from database
+ * @returns
+ */
+export const getPlayerSharesFromDatabase = async () => {
+  const sharesList = await getListOfTableEntries(PlayerShareBundle.name);
+  let allShares: PlayerShareBundle[] = [];
+  //convert database objects into company objects
+  for (const element of sharesList) {
+    const newBundle = new PlayerShareBundle(element as IPlayerShareBundleProps);
+    allShares.push(newBundle);
+  }
+  return allShares;
+};
+
+/**
+ * transfer shares from player back to company
+ */
+export const transferSharesFromPlayerToCompany = async (
+  companyId: number,
+  quantity: number,
+  priceAtSale: number
+) => {
+  //get player company
+  const databasePlayerCompany = await getFirstTableElement(PlayerCompany.name);
+  const playerCompany = new PlayerCompany(
+    databasePlayerCompany as IPlayerCompanyProperties
+  );
+  //get player bundle
+  const databasePlayerBundle = await getElementById(
+    String(companyId),
+    PlayerShareBundle.name
+  );
+  const playerBundle = new PlayerShareBundle(
+    databasePlayerBundle as IPlayerShareBundleProps
+  );
+  //get company
+  const databaseCompany = await getElementById(String(companyId), Company.name);
+  const company = new Company(databaseCompany as ICompanyProperties);
+
+  //update liquid assets
+  playerCompany.liquidAssets += quantity * priceAtSale;
+  //update ownership of bundles
+  playerBundle.quantity -= quantity;
+  company.floatingShares += quantity;
+
+  //update database with new objects
+  await updateElement(playerCompany);
+  await updateElement(playerBundle);
+  await updateElement(playerBundle);
+};

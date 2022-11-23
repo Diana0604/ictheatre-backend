@@ -15,6 +15,8 @@ import {
   editShareBundleInformation,
   deleteSellerFromDatabase,
   transferSharesOwnershipToPlayer,
+  getPlayerSharesFromDatabase,
+  transferSharesFromPlayerToCompany,
 } from "../../mysql/mysql.manager";
 import { Company } from "../../objects/Company";
 import { Seller } from "../../objects/Seller";
@@ -209,6 +211,11 @@ export const deleteSeller = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * sell shares from seller to player company
+ * @param req
+ * @param res
+ */
 export const sellShares = async (req: Request, res: Response) => {
   try {
     const query: any = req.query;
@@ -223,6 +230,49 @@ export const sellShares = async (req: Request, res: Response) => {
     }
     await transferSharesOwnershipToPlayer(
       query.id,
+      query.companyId,
+      parseInt(query.quantity),
+      query.priceAtSale
+    );
+
+    res.status(501);
+  } catch (error) {
+    res.status(500).json({ message: `error editing seller ${req.params.id}` });
+    console.log(error);
+  }
+};
+
+/**
+ * get shares owned by player company
+ */
+export const getPlayerShares = async (_req: Request, res: Response) => {
+  try {
+    const sharesList = await getPlayerSharesFromDatabase();
+    res.status(200).json(sharesList);
+  } catch (error) {
+    res.status(500).json({ message: `error getting sellers list` });
+    console.log(error);
+  }
+};
+
+/**
+ * sell shares from player company back to original company
+ * @param req
+ * @param res
+ */
+export const sellPlayerShares = async (req: Request, res: Response) => {
+  try {
+    const query: any = req.query;
+    if (!query.quantity || !query.priceAtSale) {
+      res.status(400).json({
+        message: `missing parameter quantity OR priceAtSale in query`,
+      });
+    }
+
+    if (!query.id || !query.quantity || !query.companyId) {
+      res.status(400).json({ message: `missing bundle information` });
+    }
+    await transferSharesFromPlayerToCompany(
       query.companyId,
       parseInt(query.quantity),
       query.priceAtSale
