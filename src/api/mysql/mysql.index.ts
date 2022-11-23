@@ -11,6 +11,7 @@ import {
   editSeller,
   editShareBundle,
   deleteSeller,
+  sellShares,
 } from "./mysql.controller";
 
 let router = Router();
@@ -28,5 +29,7 @@ router.get(`/sellers`, getSellersList);
 router.put(`/sellers/:id`, editSeller);
 router.delete(`/sellers/:id`, deleteSeller);
 router.put(`/shareBundle/:id`, editShareBundle);
+//sell shares during show
+router.post(`/sellshares`, sellShares);
 
 export default router;

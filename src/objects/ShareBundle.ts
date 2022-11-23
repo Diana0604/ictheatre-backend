@@ -11,7 +11,11 @@ export class ShareBundle extends DatabaseObject {
   quantity: number; //quantity of shares
 
   constructor(props: IShareBundle) {
-    const id = props.ownerId * props.companyId;
+    //bijective method between NxN->N to create ids
+    //WHERE (i,j) -> n // m = i + j, n=m(m+1)/2+j // n=(i+j)(i+j+1)/2+j
+    const i = props.ownerId;
+    const j = props.companyId;
+    const id = ((i + j) * (i + j + 1)) / 2 + j;
     super(id);
     this.ownerId = props.ownerId;
     this.companyId = props.companyId;
