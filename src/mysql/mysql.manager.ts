@@ -292,7 +292,8 @@ export const addSellerToDatabase = async (seller: ISellerProperties) => {
 export const editShareBundleInformation = async (
   newShareBundle: IShareBundle
 ) => {
-  return await updateElement(new ShareBundle(newShareBundle));
+  const newObject = new ShareBundle(newShareBundle);
+  return await updateElement(newObject);
 };
 
 /**

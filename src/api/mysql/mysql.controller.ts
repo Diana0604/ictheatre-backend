@@ -24,7 +24,7 @@ import { Company } from "../../objects/Company";
 import { Seller } from "../../objects/Seller";
 import { ShareBundle } from "../../objects/ShareBundle";
 import { PlayerCompany } from "../../objects/PlayerCompany";
-import { ISellerProperties } from "../../types/types.objects";
+import { ISellerProperties, IShareBundle } from "../../types/types.objects";
 
 /**
  * Restart database:
@@ -226,10 +226,12 @@ export const createSeller = async (req: Request, res: Response) => {
  */
 export const editShareBundle = async (req: Request, res: Response) => {
   try {
-    const newShareBundle = req.query;
-    newShareBundle.id = req.params.id;
+    let parsedQuery: any = {};
+    for (const key in req.query) {
+      parsedQuery[key] = parseInt(req.query[key] as unknown as string);
+    }
     const shareBundle = await editShareBundleInformation(
-      newShareBundle as unknown as ShareBundle
+      parsedQuery as unknown as IShareBundle
     );
     res.status(200).json(shareBundle);
   } catch (error) {
