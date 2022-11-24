@@ -16,7 +16,6 @@ import { ShowStatus } from "../objects/ShowStatus";
 import {
   ICompanyProperties,
   IPlayerCompanyProperties,
-  IPlayerShareBundleProps,
   ISellerProperties,
   IShareBundle,
   IShowStatus,
@@ -28,7 +27,6 @@ import companies from "../fixtures/companies";
 import playerCompanyFixture from "../fixtures/playerCompany";
 import sellers from "../fixtures/sellers";
 import shareBundles from "../fixtures/shareBundles";
-import { PlayerShareBundle } from "../objects/PlayerShareBundle";
 
 /**
  * seed database with:
@@ -65,12 +63,6 @@ export const seedDB = async () => {
   //share bundles:
   // Loop through companies and sellers
   for (const company of companiesArray) {
-    // Create empty sharebundle for player
-    const emptyPlayerBundle = new PlayerShareBundle({
-      companyId: company.id,
-      quantity: 0,
-    });
-    insertElement(emptyPlayerBundle);
     for (const seller of sellersArray) {
       // If bundle with those ids exists in fixtures -> insert that bundle
       let foundPair = false;
@@ -307,7 +299,7 @@ export const editPlayerCompanyInformation = async (
   return await updateElement(playerCompany);
 };
 
-export const transferSharesOwnershipToPlayer = async (
+export const sellShareBundle = async (
   bundleId: number,
   companyId: number,
   quantity: number,
@@ -318,14 +310,7 @@ export const transferSharesOwnershipToPlayer = async (
   const playerCompany = new PlayerCompany(
     databasePlayerCompany as IPlayerCompanyProperties
   );
-  //get player bundle
-  const databasePlayerBundle = await getElementById(
-    String(companyId),
-    PlayerShareBundle.name
-  );
-  const playerBundle = new PlayerShareBundle(
-    databasePlayerBundle as IPlayerShareBundleProps
-  );
+
   //get seller bundle
   const databaseSellerBundle = await getElementById(
     String(bundleId),
@@ -335,66 +320,20 @@ export const transferSharesOwnershipToPlayer = async (
     databaseSellerBundle as IShareBundle
   );
 
-  //update liquid assets
-  playerCompany.liquidAssets -= quantity * priceAtSale;
-  //update ownership of bundles
-  playerBundle.quantity += quantity;
-  sellerShareBundle.quantity -= quantity;
-
-  //update database with new objects
-  await updateElement(playerCompany);
-  await updateElement(playerBundle);
-  await updateElement(sellerShareBundle);
-};
-
-/**
- * get player shares from database
- * @returns
- */
-export const getPlayerSharesFromDatabase = async () => {
-  const sharesList = await getListOfTableEntries(PlayerShareBundle.name);
-  let allShares: PlayerShareBundle[] = [];
-  //convert database objects into company objects
-  for (const element of sharesList) {
-    const newBundle = new PlayerShareBundle(element as IPlayerShareBundleProps);
-    allShares.push(newBundle);
-  }
-  return allShares;
-};
-
-/**
- * transfer shares from player back to company
- */
-export const transferSharesFromPlayerToCompany = async (
-  companyId: number,
-  quantity: number,
-  priceAtSale: number
-) => {
-  //get player company
-  const databasePlayerCompany = await getFirstTableElement(PlayerCompany.name);
-  const playerCompany = new PlayerCompany(
-    databasePlayerCompany as IPlayerCompanyProperties
-  );
-  //get player bundle
-  const databasePlayerBundle = await getElementById(
-    String(companyId),
-    PlayerShareBundle.name
-  );
-  const playerBundle = new PlayerShareBundle(
-    databasePlayerBundle as IPlayerShareBundleProps
-  );
   //get company
   const databaseCompany = await getElementById(String(companyId), Company.name);
   const company = new Company(databaseCompany as ICompanyProperties);
 
-  //update liquid assets
-  playerCompany.liquidAssets += quantity * priceAtSale;
+  playerCompany.liquidAssets += quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
   //update ownership of bundles
-  playerBundle.quantity -= quantity;
+  sellerShareBundle.quantity -= quantity;
   company.floatingShares += quantity;
+
+  company.currentPricePerShare = company.currentPricePerShare +=
+    company.currentPricePerShare * 0.05 * quantity;
 
   //update database with new objects
   await updateElement(playerCompany);
-  await updateElement(playerBundle);
-  await updateElement(playerBundle);
+  await updateElement(sellerShareBundle);
+  await updateElement(company);
 };

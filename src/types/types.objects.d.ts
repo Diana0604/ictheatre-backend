@@ -51,11 +51,3 @@ export type IShareBundle = {
   companyId: number;
   quantity: number;
 };
-
-/**
- * shares owned by the player
- */
-export type IPlayerShareBundleProps = {
-  companyId: number;
-  quantity: number;
-};
