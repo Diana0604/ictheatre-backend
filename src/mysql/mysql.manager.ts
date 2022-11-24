@@ -327,10 +327,47 @@ export const sellShareBundle = async (
   playerCompany.liquidAssets += quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
   //update ownership of bundles
   sellerShareBundle.quantity -= quantity;
-  company.floatingShares += quantity;
 
-  company.currentPricePerShare = company.currentPricePerShare +=
-    company.currentPricePerShare * 0.05 * quantity;
+  company.currentPricePerShare =
+    company.currentPricePerShare * (1 + 0.0001) ** quantity;
+
+  //update database with new objects
+  await updateElement(playerCompany);
+  await updateElement(sellerShareBundle);
+  await updateElement(company);
+};
+
+export const buyShareBundle = async (
+  bundleId: number,
+  companyId: number,
+  quantity: number,
+  priceAtSale: number
+) => {
+  //get player company
+  const databasePlayerCompany = await getFirstTableElement(PlayerCompany.name);
+  const playerCompany = new PlayerCompany(
+    databasePlayerCompany as IPlayerCompanyProperties
+  );
+
+  //get seller bundle
+  const databaseSellerBundle = await getElementById(
+    String(bundleId),
+    ShareBundle.name
+  );
+  const sellerShareBundle = new ShareBundle(
+    databaseSellerBundle as IShareBundle
+  );
+
+  //get company
+  const databaseCompany = await getElementById(String(companyId), Company.name);
+  const company = new Company(databaseCompany as ICompanyProperties);
+
+  playerCompany.liquidAssets -= quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
+  //update ownership of bundles
+  sellerShareBundle.quantity += quantity;
+
+  company.currentPricePerShare =
+    company.currentPricePerShare * (1 - 0.0001) ** quantity;
 
   //update database with new objects
   await updateElement(playerCompany);

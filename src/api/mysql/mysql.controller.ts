@@ -15,6 +15,7 @@ import {
   editShareBundleInformation,
   deleteSellerFromDatabase,
   sellShareBundle,
+  buyShareBundle,
 } from "../../mysql/mysql.manager";
 import { Company } from "../../objects/Company";
 import { Seller } from "../../objects/Seller";
@@ -210,7 +211,7 @@ export const deleteSeller = async (req: Request, res: Response) => {
 };
 
 /**
- * sell shares from seller to player company
+ * sell shares from seller to original company
  * @param req
  * @param res
  */
@@ -227,6 +228,38 @@ export const sellShares = async (req: Request, res: Response) => {
       res.status(400).json({ message: `missing bundle information` });
     }
     await sellShareBundle(
+      query.id,
+      query.companyId,
+      parseInt(query.quantity),
+      query.priceAtSale
+    );
+
+    res.status(200).json({ message: `transfer succeessfull` });
+  } catch (error) {
+    res.status(500).json({ message: `error editing seller ${req.params.id}` });
+    console.log(error);
+  }
+};
+
+
+/**
+ * buy shares from original company to seller
+ * @param req
+ * @param res
+ */
+ export const buyShares = async (req: Request, res: Response) => {
+  try {
+    const query: any = req.query;
+    if (!query.quantity || !query.priceAtSale) {
+      res.status(400).json({
+        message: `missing parameter quantity OR priceAtSale in query`,
+      });
+    }
+
+    if (!query.id || !query.ownerId || !query.quantity || !query.companyId) {
+      res.status(400).json({ message: `missing bundle information` });
+    }
+    await buyShareBundle(
       query.id,
       query.companyId,
       parseInt(query.quantity),
