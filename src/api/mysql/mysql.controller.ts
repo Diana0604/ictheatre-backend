@@ -16,10 +16,12 @@ import {
   deleteSellerFromDatabase,
   sellShareBundle,
   buyShareBundle,
+  editPlayerCompanyInformation,
 } from "../../mysql/mysql.manager";
 import { Company } from "../../objects/Company";
 import { Seller } from "../../objects/Seller";
 import { ShareBundle } from "../../objects/ShareBundle";
+import { PlayerCompany } from "../../objects/PlayerCompany";
 
 /**
  * Restart database:
@@ -104,6 +106,22 @@ export const getPlayerCompany = async (req: Request, res: Response) => {
   }
 };
 
+export const editPlayerCompany = async (req: Request, res: Response) => {
+  try {
+    const newPlayerCompany = req.query;
+    await editPlayerCompanyInformation(
+      newPlayerCompany as unknown as PlayerCompany
+    );
+    res.status(200).json({ message: `successfully updated player company` });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "error editing player company information" });
+    console.log("error editing player company information");
+    console.log(error);
+  }
+};
+
 /**
  * Request to edit one single company given id
  * @param req
@@ -113,10 +131,10 @@ export const editCompany = async (req: Request, res: Response) => {
   try {
     const newCompany = req.query;
     newCompany.id = req.params.id;
-    const playerCompany = await editCompanyInformation(
+    const company = await editCompanyInformation(
       newCompany as unknown as Company
     );
-    res.status(200).json(playerCompany);
+    res.status(200).json(company);
   } catch (error) {
     res
       .status(500)
@@ -241,13 +259,12 @@ export const sellShares = async (req: Request, res: Response) => {
   }
 };
 
-
 /**
  * buy shares from original company to seller
  * @param req
  * @param res
  */
- export const buyShares = async (req: Request, res: Response) => {
+export const buyShares = async (req: Request, res: Response) => {
   try {
     const query: any = req.query;
     if (!query.quantity || !query.priceAtSale) {

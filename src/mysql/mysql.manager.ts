@@ -294,9 +294,10 @@ export const deleteSellerFromDatabase = async (sellerId: string) => {
 };
 
 export const editPlayerCompanyInformation = async (
-  playerCompany: PlayerCompany
+  playerCompany: IPlayerCompanyProperties
 ) => {
-  return await updateElement(playerCompany);
+  const newCompany = new PlayerCompany(playerCompany);
+  return await updateElement(newCompany);
 };
 
 export const sellShareBundle = async (

@@ -13,6 +13,7 @@ import {
   deleteSeller,
   sellShares,
   buyShares,
+  editPlayerCompany,
 } from "./mysql.controller";
 
 let router = Router();
@@ -20,6 +21,7 @@ let router = Router();
 router.post("/restart", restartDB);
 //player company
 router.get(`/playercompany`, getPlayerCompany);
+router.put(`/playercompany`, editPlayerCompany);
 //companies with shares available for trading
 router.get("/companies", getCompaniesList);
 router.get(`/companies/:id`, getCompany);
