@@ -325,6 +325,7 @@ export const sellShareBundle = async (
   const company = new Company(databaseCompany as ICompanyProperties);
 
   playerCompany.liquidAssets += quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
+  playerCompany.stockValueScore += quantity * priceAtSale;
   //update ownership of bundles
   sellerShareBundle.quantity -= quantity;
 
@@ -363,6 +364,7 @@ export const buyShareBundle = async (
   const company = new Company(databaseCompany as ICompanyProperties);
 
   playerCompany.liquidAssets -= quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
+  playerCompany.stockValueScore -= quantity * priceAtSale;
   //update ownership of bundles
   sellerShareBundle.quantity += quantity;
 

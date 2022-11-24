@@ -16,7 +16,7 @@ export interface ICompanyProperties {
 export interface IPlayerCompanyProperties {
   id?: number;
   name: string;
-  pricePerShare: number; //price at init of show
+  stockValueScore: number; //stock value score at init of show
   publicRelationsIndex: number; //Public Relations index
   liquidAssets: number; //how much money does the company have
 }

@@ -6,14 +6,14 @@ import { DatabaseObject } from "./DatabaseObject";
  */
 export class PlayerCompany extends DatabaseObject {
   name: string;
-  currentPricePerShare: number;
+  stockValueScore: number;
   publicRelationsIndex: number;
   liquidAssets: number;
 
   constructor(props: IPlayerCompanyProperties) {
     super(props.id);
     this.name = props.name;
-    this.currentPricePerShare = props.pricePerShare;
+    this.stockValueScore = props.stockValueScore;
     this.publicRelationsIndex = props.publicRelationsIndex;
     this.liquidAssets = props.liquidAssets;
   }
