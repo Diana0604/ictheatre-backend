@@ -14,6 +14,8 @@ import {
   sellShares,
   buyShares,
   editPlayerCompany,
+  createSeller,
+  createCompany,
 } from "./mysql.controller";
 
 let router = Router();
@@ -24,16 +26,18 @@ router.get(`/playercompany`, getPlayerCompany);
 router.put(`/playercompany`, editPlayerCompany);
 //companies with shares available for trading
 router.get("/companies", getCompaniesList);
+router.post("/companies", createCompany);
 router.get(`/companies/:id`, getCompany);
-router.put(`/company/:id`, editCompany);
+router.put(`/companies/:id`, editCompany);
 router.delete(`/company/:id`, deleteCompany);
 //sellers and shares
 router.get(`/sellers`, getSellersList);
+router.post(`/sellers`, createSeller);
 router.put(`/sellers/:id`, editSeller);
 router.delete(`/sellers/:id`, deleteSeller);
 router.put(`/shareBundle/:id`, editShareBundle);
 //sell shares during show
-router.post(`/sellshares`, sellShares);
-router.post(`/buyshares`, buyShares);
+router.put(`/sellshares`, sellShares);
+router.put(`/buyshares`, buyShares);
 
 export default router;

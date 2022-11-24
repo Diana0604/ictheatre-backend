@@ -203,6 +203,10 @@ export const getCompanyInformation = async (companyId: string) => {
   return await getElementById(companyId, Company.name);
 };
 
+export const addCompanyToDatabase = async (company: ICompanyProperties) => {
+  await insertElement(new Company(company));
+};
+
 /**
  * Get information for player company
  * @returns player company object
@@ -264,6 +268,20 @@ export const getAllSellers = async () => {
  */
 export const editSellerInformation = async (newSeller: ISellerProperties) => {
   return await updateElement(new Seller(newSeller));
+};
+
+export const addSellerToDatabase = async (seller: ISellerProperties) => {
+  const newSeller = new Seller(seller);
+  await insertElement(newSeller);
+  const allCompanies = await getAllCompanies();
+  for (const company of allCompanies) {
+    const emptyBundle = new ShareBundle({
+      ownerId: newSeller.id,
+      companyId: company.id,
+      quantity: 0,
+    });
+    await insertElement(emptyBundle);
+  }
 };
 
 /**

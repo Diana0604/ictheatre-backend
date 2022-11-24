@@ -17,11 +17,14 @@ import {
   sellShareBundle,
   buyShareBundle,
   editPlayerCompanyInformation,
+  addSellerToDatabase,
+  addCompanyToDatabase,
 } from "../../mysql/mysql.manager";
 import { Company } from "../../objects/Company";
 import { Seller } from "../../objects/Seller";
 import { ShareBundle } from "../../objects/ShareBundle";
 import { PlayerCompany } from "../../objects/PlayerCompany";
+import { ISellerProperties } from "../../types/types.objects";
 
 /**
  * Restart database:
@@ -65,6 +68,19 @@ export const getCompaniesList = async (_req: Request, res: Response) => {
       .status(500)
       .json({ message: "error getting companies - check server logs" });
     console.log("error getting companies list");
+    console.log(error);
+  }
+};
+
+export const createCompany = async (req: Request, res: Response) => {
+  try {
+    const newCompany = req.query;
+    newCompany.id = req.params.id;
+    await addCompanyToDatabase(newCompany as unknown as Company);
+    res.status(200).json({ message: "success creating company" });
+  } catch (error) {
+    res.status(500).json({ message: `error creating company` });
+    console.log("error creating company");
     console.log(error);
   }
 };
@@ -188,6 +204,17 @@ export const editSeller = async (req: Request, res: Response) => {
     res.status(200).json(seller);
   } catch (error) {
     res.status(500).json({ message: `error editing seller ${req.params.id}` });
+    console.log(error);
+  }
+};
+
+export const createSeller = async (req: Request, res: Response) => {
+  try {
+    const newSeller = req.query;
+    addSellerToDatabase(newSeller as unknown as ISellerProperties);
+    res.status(200).json({ message: `success ading seller` });
+  } catch (error) {
+    res.status(500).json({ message: `error adding new seller` });
     console.log(error);
   }
 };
