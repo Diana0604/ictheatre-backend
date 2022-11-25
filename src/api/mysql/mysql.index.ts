@@ -29,7 +29,7 @@ router.get("/companies", getCompaniesList);
 router.post("/companies", createCompany);
 router.get(`/companies/:id`, getCompany);
 router.put(`/companies/:id`, editCompany);
-router.delete(`/company/:id`, deleteCompany);
+router.delete(`/companies/:id`, deleteCompany);
 //sellers and shares
 router.get(`/sellers`, getSellersList);
 router.post(`/sellers`, createSeller);
