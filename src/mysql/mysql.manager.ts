@@ -47,6 +47,7 @@ export const seedDB = async () => {
   const companiesArray = [];
   //loop through fixtures and add to database
   for (const company of companies) {
+    //@ts-ignore
     const newCompany = new Company(company);
     await insertElement(newCompany);
     companiesArray.push(newCompany);
