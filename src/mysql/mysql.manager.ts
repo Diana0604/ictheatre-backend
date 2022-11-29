@@ -83,6 +83,78 @@ export const seedDB = async () => {
         ownerId: seller.id,
         companyId: company.id,
         quantity: 0,
+        companyName: company.name,
+      });
+      await insertElement(emptyBundle);
+    }
+  }
+
+  console.log("database seeded");
+
+  //display all tables that have been created
+  try {
+    showAllTables();
+  } catch (error) {
+    console.log("problem showing tables at end");
+    console.log(error);
+  }
+};
+
+export const resetDB = async () => {
+  //await cleanDB();
+  //setup show status
+  const showStatus = await getShowStatus();
+  showStatus.timeSinceStartup = 0;
+  //const showStatus = new ShowStatus({ timeSinceStartup: 0, isPlaying: false });
+  await updateElement(showStatus);
+
+  //setup player company
+  const playerFixture = playerCompanyFixture
+  //@ts-ignore
+  playerFixture.id = (await getPlayerCompanyInformation()).id
+  const playerCompany = new PlayerCompany(playerCompanyFixture);
+  await updateElement(playerCompany);
+
+  const companiesArray = await getAllCompanies();
+  //loop through fixtures and add to database
+  for (const company of companiesArray) {
+    //@ts-ignore
+    const newCompany = new Company(company);
+    newCompany.currentPricePerShare = company.initPricePerShare
+    await updateElement(newCompany);
+  }
+
+  const sellersArray = [];
+  //loop through sellers and add to database
+  for (const seller of sellers) {
+    const newSeller = new Seller(seller);
+    await updateElement(newSeller);
+    sellersArray.push(newSeller);
+  }
+
+  //share bundles:
+  // Loop through companies and sellers
+  for (const company of companiesArray) {
+    for (const seller of sellersArray) {
+      // If bundle with those ids exists in fixtures -> insert that bundle
+      let foundPair = false;
+      for (const shareBundle of shareBundles) {
+        if (
+          shareBundle.ownerId === seller.id &&
+          shareBundle.companyId === company.id
+        ) {
+          const newShareBundle = new ShareBundle(shareBundle);
+          await insertElement(newShareBundle);
+          foundPair = true;
+        }
+      }
+      if (foundPair) continue;
+      // Else -> insert empty bundle
+      const emptyBundle = new ShareBundle({
+        ownerId: seller.id,
+        companyId: company.id,
+        quantity: 0,
+        companyName: company.name,
       });
       await insertElement(emptyBundle);
     }
@@ -280,6 +352,7 @@ export const addSellerToDatabase = async (seller: ISellerProperties) => {
       ownerId: newSeller.id,
       companyId: company.id,
       quantity: 0,
+      companyName: company.name,
     });
     await insertElement(emptyBundle);
   }

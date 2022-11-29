@@ -8,6 +8,7 @@ import { DatabaseObject } from "./DatabaseObject";
 export class ShareBundle extends DatabaseObject {
   ownerId: number; //who owns shares -> our company or a potential seller
   companyId: number; //company for which these shares are
+  companyName: string;
   quantity: number; //quantity of shares
 
   constructor(props: IShareBundle) {
@@ -20,5 +21,6 @@ export class ShareBundle extends DatabaseObject {
     this.ownerId = props.ownerId;
     this.companyId = props.companyId;
     this.quantity = props.quantity;
+    this.companyName = props.companyName;
   }
 }

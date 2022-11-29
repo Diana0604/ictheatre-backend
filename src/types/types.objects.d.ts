@@ -50,4 +50,5 @@ export type IShareBundle = {
   ownerId: number;
   companyId: number;
   quantity: number;
+  companyName: string;
 };

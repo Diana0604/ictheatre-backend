@@ -12,10 +12,10 @@ const config: IConfig = {
             encrypt: true
         }
     },
-    seedDB: false, //set to false if you don't want to seed the dab
+    seedDB: true, //set to false if you don't want to seed the dab
     showConfig: {
         lengthInSeconds: 300, //length of show in seconds
-        updateIntervalInSeconds: 0.2 //how often do we update companies prices
+        updateIntervalInSeconds: 60 //how often do we update companies prices
     }
 }
 

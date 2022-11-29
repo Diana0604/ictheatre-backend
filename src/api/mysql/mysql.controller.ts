@@ -7,7 +7,7 @@ import {
   getCompanyInformation,
   getShowStatus,
   getPlayerCompanyInformation,
-  seedDB,
+  resetDB,
   editCompanyInformation,
   deleteCompanyFromDatabase,
   getAllSellers,
@@ -41,9 +41,10 @@ export const restartDB = async (_req: Request, res: Response) => {
         .json({ message: "show is currently playing, cannot restart DB" });
       return;
     }
-    await cleanDB();
+    
+    //await cleanDB();
     //seed database
-    await seedDB();
+    await resetDB();
     res.status(200).json({ message: "database seeded" });
   } catch (error) {
     res
