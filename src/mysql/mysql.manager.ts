@@ -26,7 +26,7 @@ import { ShareBundle } from "../objects/ShareBundle";
 import companies from "../fixtures/companies";
 import playerCompanyFixture from "../fixtures/playerCompany";
 import sellers from "../fixtures/sellers";
-import shareBundles from "../fixtures/shareBundles";
+import shareBundlesFixture from "../fixtures/shareBundles";
 
 /**
  * seed database with:
@@ -67,7 +67,7 @@ export const seedDB = async () => {
     for (const seller of sellersArray) {
       // If bundle with those ids exists in fixtures -> insert that bundle
       let foundPair = false;
-      for (const shareBundle of shareBundles) {
+      for (const shareBundle of shareBundlesFixture) {
         if (
           shareBundle.ownerId === seller.id &&
           shareBundle.companyId === company.id
@@ -109,9 +109,9 @@ export const resetDB = async () => {
   await updateElement(showStatus);
 
   //setup player company
-  const playerFixture = playerCompanyFixture
+  const playerFixture = playerCompanyFixture;
   //@ts-ignore
-  playerFixture.id = (await getPlayerCompanyInformation()).id
+  playerFixture.id = (await getPlayerCompanyInformation()).id;
   const playerCompany = new PlayerCompany(playerCompanyFixture);
   await updateElement(playerCompany);
 
@@ -120,47 +120,18 @@ export const resetDB = async () => {
   for (const company of companiesArray) {
     //@ts-ignore
     const newCompany = new Company(company);
-    newCompany.currentPricePerShare = company.initPricePerShare
+    newCompany.currentPricePerShare = company.initPricePerShare;
     await updateElement(newCompany);
   }
 
-  const sellersArray = [];
-  //loop through sellers and add to database
-  for (const seller of sellers) {
-    const newSeller = new Seller(seller);
-    await updateElement(newSeller);
-    sellersArray.push(newSeller);
+  //share bundles -> reset quantity to initial quantity
+  const { shareBundles } = await getAllSellers();
+  for (const shareBundle of shareBundles) {
+    shareBundle.quantity = shareBundle.initialQuantity;
+    updateElement(shareBundle);
   }
 
-  //share bundles:
-  // Loop through companies and sellers
-  for (const company of companiesArray) {
-    for (const seller of sellersArray) {
-      // If bundle with those ids exists in fixtures -> insert that bundle
-      let foundPair = false;
-      for (const shareBundle of shareBundles) {
-        if (
-          shareBundle.ownerId === seller.id &&
-          shareBundle.companyId === company.id
-        ) {
-          const newShareBundle = new ShareBundle(shareBundle);
-          await insertElement(newShareBundle);
-          foundPair = true;
-        }
-      }
-      if (foundPair) continue;
-      // Else -> insert empty bundle
-      const emptyBundle = new ShareBundle({
-        ownerId: seller.id,
-        companyId: company.id,
-        quantity: 0,
-        companyName: company.name,
-      });
-      await insertElement(emptyBundle);
-    }
-  }
-
-  console.log("database seeded");
+  console.log("database reset");
 
   //display all tables that have been created
   try {
