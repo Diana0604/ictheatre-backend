@@ -3,19 +3,14 @@ import { Request, Response } from "express";
 import {
   getShowStatus,
   resetDB,
-  getAllSellers,
   getAllPlayerBundles,
-  editSellerInformation,
   editShareBundleInformation,
-  deleteSellerFromDatabase,
   sellShareBundle,
   buyShareBundle,
-  addSellerToDatabase,
   buyPlayerShareBundle,
   sellPlayerShareBundle,
 } from "../../mysql/mysql.manager";
-import { Seller } from "../../objects/Seller";
-import { ISellerProperties, IShareBundle } from "../../types/types.objects";
+import { IShareBundle } from "../../types/types.objects";
 
 /**
  * Restart database:
@@ -45,23 +40,6 @@ export const restartDB = async (_req: Request, res: Response) => {
   }
 };
 
-
-
-/**
- * Get list of sellers and their shares information
- * @param _req
- * @param res
- */
-export const getSellersList = async (_req: Request, res: Response) => {
-  try {
-    const sellersList = await getAllSellers();
-    res.status(200).json(sellersList);
-  } catch (error) {
-    res.status(500).json({ message: `error getting sellers list` });
-    console.log(error);
-  }
-};
-
 export const getPlayerBundles = async (_req: Request, res: Response) => {
   try {
     const playerBundles = await getAllPlayerBundles();
@@ -71,34 +49,6 @@ export const getPlayerBundles = async (_req: Request, res: Response) => {
     console.log(error);
   }
 }
-
-/**
- * Request to edit seller given id
- * @param req
- * @param res
- */
-export const editSeller = async (req: Request, res: Response) => {
-  try {
-    const newSeller = req.query;
-    newSeller.id = req.params.id;
-    const seller = await editSellerInformation(newSeller as unknown as Seller);
-    res.status(200).json(seller);
-  } catch (error) {
-    res.status(500).json({ message: `error editing seller ${req.params.id}` });
-    console.log(error);
-  }
-};
-
-export const createSeller = async (req: Request, res: Response) => {
-  try {
-    const newSeller = req.query;
-    addSellerToDatabase(newSeller as unknown as ISellerProperties);
-    res.status(200).json({ message: `success ading seller` });
-  } catch (error) {
-    res.status(500).json({ message: `error adding new seller` });
-    console.log(error);
-  }
-};
 
 /**
  * Request to edit share bundle given an id
@@ -119,21 +69,6 @@ export const editShareBundle = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ message: `error editing share bundle ${req.params.id}` });
-    console.log(error);
-  }
-};
-
-/**
- * Request to delete a seller and their shares
- * @param req
- * @param res
- */
-export const deleteSeller = async (req: Request, res: Response) => {
-  try {
-    const seller = await deleteSellerFromDatabase(req.params.id);
-    res.status(200).json(seller);
-  } catch (error) {
-    res.status(500).json({ message: `error editing seller ${req.params.id}` });
     console.log(error);
   }
 };

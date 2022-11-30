@@ -23,6 +23,7 @@ export const isExistingCompany = (potentialCompany: any) => {
   if (!isCompany(potentialCompany)) return false;
   if (!potentialCompany.id) return false;
   if (!potentialCompany.currentPricePerShare) return false;
+  return true;
 };
 
 /**
@@ -30,7 +31,7 @@ export const isExistingCompany = (potentialCompany: any) => {
  * @param potentialCompany
  * @returns
  */
- export const isPlayerCompany = (potentialCompany: any) => {
+export const isPlayerCompany = (potentialCompany: any) => {
   if (!potentialCompany.name) return false;
   if (!potentialCompany.stockValueScore) return false;
   if (!potentialCompany.publicRelationsIndex) return false;
@@ -43,8 +44,19 @@ export const isExistingCompany = (potentialCompany: any) => {
  * @param potentialCompany
  * @returns
  */
- export const isExistingPlayerCompany = (potentialCompany: any) => {
+export const isExistingPlayerCompany = (potentialCompany: any) => {
   if (!isPlayerCompany(potentialCompany)) return false;
-  if(!potentialCompany.id) return false;
+  if (!potentialCompany.id) return false;
+  return true;
+};
+
+export const isSeller = (potentialSeller: any) => {
+  if (!potentialSeller.name) return false;
+  return true;
+};
+
+export const isExistingSeller = (potentialSeller: any) => {
+  if (!isSeller(potentialSeller)) return false;
+  if (!potentialSeller.id) return false;
   return true;
 };

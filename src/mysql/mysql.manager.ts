@@ -7,7 +7,6 @@ import {
   getElementById,
   updateElement,
   cleanDB,
-  deleteElementById,
 } from "./mysql.wrapper";
 //classes
 import { Company } from "../objects/Company";
@@ -17,7 +16,6 @@ import {
   ICompanyProperties,
   IPlayerCompanyProperties,
   IPlayerShareBundle,
-  ISellerProperties,
   IShareBundle,
   IShowStatus,
 } from "../types/types.objects";
@@ -29,7 +27,8 @@ import playerCompanyFixture from "../fixtures/playerCompany";
 import sellers from "../fixtures/sellers";
 import shareBundlesFixture from "../fixtures/shareBundles";
 import { PlayerShareBundle } from "../objects/PlayerShareBundle";
-import { getCompaniesListFromDB } from "./companies/companies.manager";
+import { getCompaniesListFromDB, getPlayerCompanyFromDB } from "./companies/companies.manager";
+import { getSellersListFromDB } from "./sellers/sellers.manager";
 
 /**
  * seed database with:
@@ -115,14 +114,15 @@ export const resetDB = async () => {
   //setup show status
   const showStatus = await getShowStatus();
   showStatus.timeSinceStartup = 0;
-  //const showStatus = new ShowStatus({ timeSinceStartup: 0, isPlaying: false });
+  console.log('update show status')
   await updateElement(showStatus);
 
   //setup player company
   const playerFixture = playerCompanyFixture;
   //@ts-ignore
-  playerFixture.id = (await getPlayerCompanyInformation()).id;
+  playerFixture.id = (await getPlayerCompanyFromDB()).id;
   const playerCompany = new PlayerCompany(playerCompanyFixture);
+  console.log('update playercomp')
   await updateElement(playerCompany);
 
   const companiesArray = await getCompaniesListFromDB();
@@ -131,6 +131,7 @@ export const resetDB = async () => {
     //@ts-ignore
     const newCompany = new Company(company);
     newCompany.currentPricePerShare = company.initPricePerShare;
+    console.log('update new company')
     await updateElement(newCompany);
     //reset player bundles
     const newPlayerBundle = new PlayerShareBundle({
@@ -138,13 +139,16 @@ export const resetDB = async () => {
       companyName: newCompany.name,
       quantity: 0,
     });
+    console.log('update bundle')
     await updateElement(newPlayerBundle);
   }
 
   //share bundles -> reset quantity to initial quantity
-  const { shareBundles } = await getAllSellers();
+
+  const { shareBundles } = await getSellersListFromDB();
   for (const shareBundle of shareBundles) {
     shareBundle.quantity = shareBundle.initialQuantity;
+    console.log('update sellers')
     updateElement(shareBundle);
   }
 
@@ -241,50 +245,6 @@ export const addToTimerInSeconds = async (seconds: number) => {
 };
 
 
-/**
- *
- * @returns list of all companies from database
- */
-export const getAllSellers = async () => {
-  const sellersList = await getListOfTableEntries(Seller.name);
-  const shareBundlesList = await getListOfTableEntries(ShareBundle.name);
-  let sellersObjectList: Seller[] = [];
-  let shareBundlesObjectList: ShareBundle[] = [];
-  //convert database objects into Seller / ShareBundle objects
-  for (const element of sellersList) {
-    const seller = new Seller(element as ISellerProperties);
-    sellersObjectList.push(seller);
-  }
-  for (const element of shareBundlesList) {
-    const bundle = new ShareBundle(element as IShareBundle);
-    shareBundlesObjectList.push(bundle);
-  }
-  return { sellers: sellersObjectList, shareBundles: shareBundlesObjectList };
-};
-
-/**
- * edit seller's information (just name, no bundles)
- * @param newSeller
- * @returns
- */
-export const editSellerInformation = async (newSeller: ISellerProperties) => {
-  return await updateElement(new Seller(newSeller));
-};
-
-export const addSellerToDatabase = async (seller: ISellerProperties) => {
-  const newSeller = new Seller(seller);
-  await insertElement(newSeller);
-  const allCompanies = await getCompaniesListFromDB();
-  for (const company of allCompanies) {
-    const emptyBundle = new ShareBundle({
-      ownerId: newSeller.id,
-      companyId: company.id,
-      quantity: 0,
-      companyName: company.name,
-    });
-    await insertElement(emptyBundle);
-  }
-};
 
 /**
  * edit share bundles information
@@ -296,22 +256,6 @@ export const editShareBundleInformation = async (
 ) => {
   const newObject = new ShareBundle(newShareBundle);
   return await updateElement(newObject);
-};
-
-/**
- * delete seller and all bundles associated to them from the database
- * @param sellerId id of the seller to delete
- */
-export const deleteSellerFromDatabase = async (sellerId: string) => {
-  await deleteElementById(sellerId, Seller.name);
-  const companies = await getCompaniesListFromDB();
-  for (const company of companies) {
-    const shareBundleId = (sellerId as unknown as number) * company.id;
-    await deleteElementById(
-      shareBundleId as unknown as string,
-      ShareBundle.name
-    );
-  }
 };
 
 export const sellShareBundle = async (

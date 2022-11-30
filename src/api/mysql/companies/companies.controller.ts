@@ -1,6 +1,10 @@
 //types
 import { Request, Response } from "express";
-import { isCompany, isExistingCompany, isExistingPlayerCompany } from "../../../functions/objectChecker";
+import {
+  isCompany,
+  isExistingCompany,
+  isExistingPlayerCompany,
+} from "../../../functions/objectChecker";
 import {
   addCompanyToDB,
   deleteCompanyFromDB,
@@ -10,8 +14,9 @@ import {
   getCompanyFromDB,
   getPlayerCompanyFromDB,
 } from "../../../mysql/companies/companies.manager";
-import { Company } from "../../../objects/Company";
+//import { Company } from "../../../objects/Company";
 import { PlayerCompany } from "../../../objects/PlayerCompany";
+import { ICompanyProperties } from "../../../types/types.objects";
 
 /**
  * Get list of companies and their shares information. WARNING: won't return player company
@@ -41,14 +46,14 @@ export const addCompany = async (req: Request, res: Response) => {
   try {
     //check query contains proper parameters for a company
     const newCompany = req.query;
-    if (!isCompany(req.query)) {
+    if (!isCompany(newCompany)) {
       res
         .status(400)
         .json({ message: `Missing required paramater for adding new company` });
       return;
     }
     //add company to database
-    await addCompanyToDB(newCompany as unknown as Company);
+    await addCompanyToDB(newCompany as unknown as ICompanyProperties);
     res.status(200).json({ message: "success creating company" });
   } catch (error) {
     res.status(500).json({ message: `error creating company` });
@@ -96,19 +101,19 @@ export const getPlayerCompany = async (req: Request, res: Response) => {
 
 /**
  * Edit information for player company
- * @param req 
- * @param res 
+ * @param req
+ * @param res
  */
 export const editPlayerCompany = async (req: Request, res: Response) => {
   try {
     const newPlayerCompany = req.query;
-    if(!isExistingPlayerCompany(newPlayerCompany)) {
-      res.status(400).json({message: `missing some parameters to add player company`})
+    if (!isExistingPlayerCompany(newPlayerCompany)) {
+      res
+        .status(400)
+        .json({ message: `missing some parameters to add player company` });
       return;
     }
-    await editPlayerCompanyInDB(
-      newPlayerCompany as unknown as PlayerCompany
-    );
+    await editPlayerCompanyInDB(newPlayerCompany as unknown as PlayerCompany);
     res.status(200).json({ message: `successfully updated player company` });
   } catch (error) {
     res
@@ -128,13 +133,11 @@ export const editCompany = async (req: Request, res: Response) => {
   try {
     const newCompany = req.query;
     newCompany.id = req.params.id;
-    if(!isExistingCompany(newCompany)) {
-      res.status(400).json(`missing some parameters of company`)
+    if (!isExistingCompany(newCompany)) {
+      res.status(400).json(`missing some parameters of company`);
       return;
     }
-    const company = await editCompanyInDB(
-      newCompany as unknown as Company
-    );
+    const company = await editCompanyInDB(newCompany as unknown as ICompanyProperties);
     res.status(200).json(company);
   } catch (error) {
     res

@@ -141,11 +141,7 @@ export const getListOfTableEntries = async (tableName: string) => {
     try {
         const getListOfTables = showEntriesFromTableCommand(tableName)
         const tableArray = await execute(getListOfTables) as Array<unknown> as Array<any>
-        let newArray = []
-        for (const element of tableArray) {
-            newArray.push(element)
-        }
-        return newArray
+        return tableArray
     } catch (error) {
         throw error
     }

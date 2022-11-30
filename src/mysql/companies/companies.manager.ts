@@ -15,7 +15,7 @@ import {
   IPlayerCompanyProperties,
 } from "../../types/types.objects";
 import { ShareBundle } from "../../objects/ShareBundle";
-import { getAllSellers } from "../mysql.manager";
+import { getSellersListFromDB } from "../sellers/sellers.manager";
 
 
 /**
@@ -81,7 +81,7 @@ export const editCompanyInDB = async (
  */
 export const deleteCompanyFromDB = async (id: string) => {
   deleteElementById(id, Company.name);
-  const allSellers = await getAllSellers();
+  const allSellers = await getSellersListFromDB();
   for (const seller of allSellers.sellers) {
     const shareBundleId = seller.id * (id as unknown as number);
     deleteElementById(shareBundleId as unknown as string, ShareBundle.name);
