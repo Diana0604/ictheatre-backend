@@ -14,13 +14,13 @@ let router = Router();
 
 //GET
 router.get("/", getCompaniesList); //won't return player company
-router.get(`/:id`, getCompany);
 router.get(`/playercompany`, getPlayerCompany);
+router.get(`/:id`, getCompany);
 //POST
 router.post("/", addCompany);
 //PUT
-router.put(`/:id`, editCompany);
 router.put(`/playercompany`, editPlayerCompany);
+router.put(`/:id`, editCompany);
 //DELETE
 router.delete(`/:id`, deleteCompany);
 
