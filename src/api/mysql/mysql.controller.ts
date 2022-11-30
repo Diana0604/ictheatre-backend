@@ -1,7 +1,5 @@
 //types
 import { Request, Response } from "express";
-//database
-import { cleanDB } from "../../mysql/mysql.wrapper";
 import {
   getAllCompanies,
   getCompanyInformation,
@@ -11,6 +9,7 @@ import {
   editCompanyInformation,
   deleteCompanyFromDatabase,
   getAllSellers,
+  getAllPlayerBundles,
   editSellerInformation,
   editShareBundleInformation,
   deleteSellerFromDatabase,
@@ -19,10 +18,11 @@ import {
   editPlayerCompanyInformation,
   addSellerToDatabase,
   addCompanyToDatabase,
+  buyPlayerShareBundle,
+  sellPlayerShareBundle,
 } from "../../mysql/mysql.manager";
 import { Company } from "../../objects/Company";
 import { Seller } from "../../objects/Seller";
-import { ShareBundle } from "../../objects/ShareBundle";
 import { PlayerCompany } from "../../objects/PlayerCompany";
 import { ISellerProperties, IShareBundle } from "../../types/types.objects";
 
@@ -42,7 +42,6 @@ export const restartDB = async (_req: Request, res: Response) => {
       return;
     }
     
-    //await cleanDB();
     //seed database
     await resetDB();
     res.status(200).json({ message: "database seeded" });
@@ -192,6 +191,16 @@ export const getSellersList = async (_req: Request, res: Response) => {
   }
 };
 
+export const getPlayerBundles = async (_req: Request, res: Response) => {
+  try {
+    const playerBundles = await getAllPlayerBundles();
+    res.status(200).json(playerBundles);
+  } catch (error) {
+    res.status(500).json({ message: `error getting sellers list` });
+    console.log(error);
+  }
+}
+
 /**
  * Request to edit seller given id
  * @param req
@@ -270,10 +279,12 @@ export const sellShares = async (req: Request, res: Response) => {
       res.status(400).json({
         message: `missing parameter quantity OR priceAtSale in query`,
       });
+      return;
     }
 
     if (!query.id || !query.ownerId || !query.quantity || !query.companyId) {
       res.status(400).json({ message: `missing bundle information` });
+      return;
     }
     await sellShareBundle(
       query.id,
@@ -289,6 +300,33 @@ export const sellShares = async (req: Request, res: Response) => {
   }
 };
 
+export const sellPlayerShares = async (req: Request, res: Response) => {
+  try {
+    const query: any = req.query;
+    if (!query.quantity || !query.priceAtSale) {
+      res.status(400).json({
+        message: `missing parameter quantity OR priceAtSale in query`,
+      });
+      return;
+    }
+
+    if (!query.id || !query.quantity || !query.companyId) {
+      res.status(400).json({ message: `missing bundle information` });
+      return;
+    }
+    await sellPlayerShareBundle(
+      query.id,
+      parseInt(query.quantity),
+      query.priceAtSale
+    );
+
+    res.status(200).json({ message: `transfer succeessfull` });
+  } catch(error) {
+    res.status(500).json({ message: `error editing bundle for company ${req.params.id}` });
+    console.log(error);
+  }
+}
+
 /**
  * buy shares from original company to seller
  * @param req
@@ -301,10 +339,12 @@ export const buyShares = async (req: Request, res: Response) => {
       res.status(400).json({
         message: `missing parameter quantity OR priceAtSale in query`,
       });
+      return;
     }
 
     if (!query.id || !query.ownerId || !query.quantity || !query.companyId) {
       res.status(400).json({ message: `missing bundle information` });
+      return;
     }
     await buyShareBundle(
       query.id,
@@ -319,3 +359,30 @@ export const buyShares = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+export const buyPlayerShares = async (req: Request, res: Response) => {
+  try {
+    const query: any = req.query;
+    if (!query.quantity || !query.priceAtSale) {
+      res.status(400).json({
+        message: `missing parameter quantity OR priceAtSale in query`,
+      });
+      return;
+    }
+
+    if (!query.id || !query.quantity || !query.companyId) {
+      res.status(400).json({ message: `missing bundle information` });
+      return;
+    }
+    await buyPlayerShareBundle(
+      query.id,
+      parseInt(query.quantity),
+      query.priceAtSale
+    );
+
+    res.status(200).json({ message: `transfer succeessfull` });
+  } catch(error) {
+    res.status(500).json({ message: `error editing bundle for company ${req.params.id}` });
+    console.log(error);
+  }
+}

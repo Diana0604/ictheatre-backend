@@ -53,3 +53,12 @@ export type IShareBundle = {
   companyName: string;
   initialQuantity?: number;
 };
+
+/**
+ * share bundle for player
+ */
+export type IPlayerShareBundle = {
+  companyId: number;
+  quantity: number;
+  companyName: string;
+}

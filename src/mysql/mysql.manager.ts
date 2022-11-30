@@ -16,6 +16,7 @@ import { ShowStatus } from "../objects/ShowStatus";
 import {
   ICompanyProperties,
   IPlayerCompanyProperties,
+  IPlayerShareBundle,
   ISellerProperties,
   IShareBundle,
   IShowStatus,
@@ -27,6 +28,7 @@ import companies from "../fixtures/companies";
 import playerCompanyFixture from "../fixtures/playerCompany";
 import sellers from "../fixtures/sellers";
 import shareBundlesFixture from "../fixtures/shareBundles";
+import { PlayerShareBundle } from "../objects/PlayerShareBundle";
 
 /**
  * seed database with:
@@ -51,6 +53,13 @@ export const seedDB = async () => {
     const newCompany = new Company(company);
     await insertElement(newCompany);
     companiesArray.push(newCompany);
+    //add empty player share bundle
+    const newPlayerBundle = new PlayerShareBundle({
+      companyId: newCompany.id,
+      companyName: newCompany.name,
+      quantity: 0,
+    });
+    await insertElement(newPlayerBundle);
   }
 
   const sellersArray = [];
@@ -122,6 +131,13 @@ export const resetDB = async () => {
     const newCompany = new Company(company);
     newCompany.currentPricePerShare = company.initPricePerShare;
     await updateElement(newCompany);
+    //reset player bundles
+    const newPlayerBundle = new PlayerShareBundle({
+      companyId: newCompany.id,
+      companyName: newCompany.name,
+      quantity: 0,
+    });
+    await updateElement(newPlayerBundle);
   }
 
   //share bundles -> reset quantity to initial quantity
@@ -403,6 +419,42 @@ export const sellShareBundle = async (
   await updateElement(company);
 };
 
+export const sellPlayerShareBundle = async (
+  companyId: number,
+  quantity: number,
+  priceAtSale: number
+) => {
+  //get player company
+  const databasePlayerCompany = await getFirstTableElement(PlayerCompany.name);
+  const playerCompany = new PlayerCompany(
+    databasePlayerCompany as IPlayerCompanyProperties
+  );
+  //get player bundle
+  const databaseSellerBundle = await getElementById(
+    String(companyId),
+    PlayerShareBundle.name
+  );
+  const shareBundle = new PlayerShareBundle(
+    databaseSellerBundle as IPlayerShareBundle
+  );
+  //get company
+  const databaseCompany = await getElementById(String(companyId), Company.name);
+  const company = new Company(databaseCompany as ICompanyProperties);
+
+  //update assets
+  playerCompany.liquidAssets += quantity * priceAtSale;
+  //update ownership of bundles
+  shareBundle.quantity -= quantity;
+  //company
+  company.currentPricePerShare =
+    company.currentPricePerShare * (1 + 0.0001) ** quantity;
+
+  //save in database
+  updateElement(playerCompany);
+  updateElement(shareBundle);
+  updateElement(company);
+};
+
 export const buyShareBundle = async (
   bundleId: number,
   companyId: number,
@@ -441,3 +493,52 @@ export const buyShareBundle = async (
   await updateElement(sellerShareBundle);
   await updateElement(company);
 };
+
+export const buyPlayerShareBundle = async (
+  companyId: number,
+  quantity: number,
+  priceAtSale: number
+) => {
+  //get player company
+  const databasePlayerCompany = await getFirstTableElement(PlayerCompany.name);
+  const playerCompany = new PlayerCompany(
+    databasePlayerCompany as IPlayerCompanyProperties
+  );
+
+  //get seller bundle
+  const databaseSellerBundle = await getElementById(
+    String(companyId),
+    PlayerShareBundle.name
+  );
+  const shareBundle = new PlayerShareBundle(
+    databaseSellerBundle as IPlayerShareBundle
+  );
+
+  //get company
+  const databaseCompany = await getElementById(String(companyId), Company.name);
+  const company = new Company(databaseCompany as ICompanyProperties);
+
+  playerCompany.liquidAssets -= quantity * priceAtSale;
+  playerCompany.stockValueScore -= quantity * priceAtSale;
+  //update ownership of bundles
+  shareBundle.quantity += quantity;
+  //update company shares price
+  company.currentPricePerShare =
+    company.currentPricePerShare * (1 - 0.0001) ** quantity;
+
+  //update database with new objects
+  await updateElement(playerCompany);
+  await updateElement(shareBundle);
+  await updateElement(company);
+};
+
+export const getAllPlayerBundles = async () => {
+  const playerBundles = await getListOfTableEntries(PlayerShareBundle.name);
+  let allBundlesList: PlayerShareBundle[] = [];
+  //convert database objects into company objects
+  for (const element of playerBundles) {
+    const newBundle = new PlayerShareBundle(element as IPlayerShareBundle);
+    allBundlesList.push(newBundle);
+  }
+  return allBundlesList;
+}; 
