@@ -11,13 +11,14 @@ import {
 
 let router = Router();
 
-//shares
-router.put(`/bundle/:id`, editShareBundle);
+//get
 router.get(`/playerbundles`, getPlayerBundlesList);
-//sell shares during show
+//post
 router.post(`/sell`, sellShares);
 router.post(`/buy`, buyShares);
 router.post(`/playersell`, sellPlayerShares);
 router.post(`/playerbuy`, buyPlayerShares);
+//put
+router.put(`/bundle/:id`, editShareBundle);
 
 export default router;

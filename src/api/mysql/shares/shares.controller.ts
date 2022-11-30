@@ -15,6 +15,7 @@ import {
 } from "../../../mysql/sharebundles/sharebundles.manager";
 import { IShareBundle } from "../../../types/types.objects";
 
+//================================== GET REQUESTS ==============================
 /**
  * get bundles lists just for player
  * @param _req
@@ -30,30 +31,7 @@ export const getPlayerBundlesList = async (_req: Request, res: Response) => {
   }
 };
 
-/**
- * Request to edit share bundle given an id
- * @param req
- * @param res
- */
-export const editShareBundle = async (req: Request, res: Response) => {
-  try {
-    const newBundle = req.query;
-    if (!isShareBundle(newBundle)) {
-      res.json(400);
-      return;
-    }
-    const shareBundle = await editShareBundleInDB(
-      newBundle as unknown as IShareBundle
-    );
-    res.status(200).json(shareBundle);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: `error editing share bundle ${req.params.id}` });
-    console.log(error);
-  }
-};
-
+//================================== POST REQUESTS (create) ==========================
 /**
  * sell shares from seller to original company
  * @param req
@@ -182,6 +160,31 @@ export const buyPlayerShares = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ message: `error editing bundle for company ${req.params.id}` });
+    console.log(error);
+  }
+};
+
+// ================================ PUT REQUESTS (edit) ===========================
+/**
+ * Request to edit share bundle given an id
+ * @param req
+ * @param res
+ */
+export const editShareBundle = async (req: Request, res: Response) => {
+  try {
+    const newBundle = req.query;
+    if (!isShareBundle(newBundle)) {
+      res.json(400);
+      return;
+    }
+    const shareBundle = await editShareBundleInDB(
+      newBundle as unknown as IShareBundle
+    );
+    res.status(200).json(shareBundle);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: `error editing share bundle ${req.params.id}` });
     console.log(error);
   }
 };
