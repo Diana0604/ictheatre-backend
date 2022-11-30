@@ -1,5 +1,12 @@
 export default [
   {
+    name: "Rune",
+    description: "Audience company.",
+    initPricePerShare: 141.92,
+    id: 210,
+    tendency: 1,
+  },
+  {
     name: "BDSM",
     description: "Botham Davey Smith Myers is a property investment company.",
     initPricePerShare: 141.92,
