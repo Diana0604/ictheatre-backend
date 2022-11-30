@@ -6,7 +6,7 @@ import {
   deleteElementById,
 } from "../mysql.wrapper";
 //classes
-import { ISellerProperties, IShareBundle } from "../../types/types.objects";
+import { ISellerProperties } from "../../types/types.objects";
 import { Seller } from "../../objects/Seller";
 import { ShareBundle } from "../../objects/ShareBundle";
 //config and fixtures
@@ -27,8 +27,10 @@ export const getSellersListFromDB = async () => {
  * @param seller
  */
 export const addSellerToDB = async (seller: ISellerProperties) => {
+  //add seller info to database
   const newSeller = new Seller(seller);
   await insertElement(newSeller);
+  //add new share bundles for all companies in db
   const allCompanies = await getCompaniesListFromDB();
   for (const company of allCompanies) {
     const emptyBundle = new ShareBundle({
