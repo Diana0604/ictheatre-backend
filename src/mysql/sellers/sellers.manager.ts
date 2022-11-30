@@ -19,18 +19,7 @@ import { getCompaniesListFromDB } from "../companies/companies.manager";
 export const getSellersListFromDB = async () => {
   const sellersList = await getListOfTableEntries(Seller.name);
   const shareBundlesList = await getListOfTableEntries(ShareBundle.name);
-  let sellersObjectList: Seller[] = [];
-  let shareBundlesObjectList: ShareBundle[] = [];
-  //convert database objects into Seller / ShareBundle objects
-  for (const element of sellersList) {
-    const seller = new Seller(element as ISellerProperties);
-    sellersObjectList.push(seller);
-  }
-  for (const element of shareBundlesList) {
-    const bundle = new ShareBundle(element as IShareBundle);
-    shareBundlesObjectList.push(bundle);
-  }
-  return { sellers: sellersObjectList, shareBundles: shareBundlesObjectList };
+  return { sellers: sellersList, shareBundles: shareBundlesList };
 };
 
 /**
