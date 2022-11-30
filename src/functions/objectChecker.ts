@@ -60,3 +60,32 @@ export const isExistingSeller = (potentialSeller: any) => {
   if (!potentialSeller.id) return false;
   return true;
 };
+
+export const isShareBundle = (potentialBundle: any) => {
+  if (!potentialBundle.ownerId) return false;
+  if (!potentialBundle.companyId) return false;
+  if (!potentialBundle.quantity) return false;
+  if (!potentialBundle.companyName) return false;
+  return true;
+};
+
+export const isExistingShareBundle = (potentialBundle: any) => {
+  if (!isShareBundle(potentialBundle)) return false;
+  if(!potentialBundle.id) return false;
+  if (!potentialBundle.initialQuantity) return false;
+  return true;
+};
+
+export const isPlayerShareBundle = (potentialBundle : any) => {
+  if (!potentialBundle.companyId) return false;
+  if (!potentialBundle.quantity) return false;
+  if (!potentialBundle.companyName) return false;
+  return true;
+}
+
+
+export const isExistingPlayerShareBundle = (potentialBundle: any) => {
+  if (!isPlayerShareBundle(potentialBundle)) return false;
+  if(!potentialBundle.id) return false;
+  return true;
+};
