@@ -1,14 +1,17 @@
 //types
 import { Request, Response } from "express";
+import { ISellerProperties } from "../../../types/types.objects";
+//type checkers
 import { isExistingSeller, isSeller } from "../../../functions/objectChecker";
+//database methods
 import {
   getSellersListFromDB,
   editSellerInDB,
   addSellerToDB,
   deleteSellerFromDB,
 } from "../../../mysql/sellers/sellers.manager";
-import { ISellerProperties } from "../../../types/types.objects";
 
+//================================== GET REQUESTS ==============================
 /**
  * Get list of sellers and their shares information. Will also return sharebundles -> for now like this we'll see in future.
  * @param _req
@@ -24,6 +27,29 @@ export const getSellersList = async (_req: Request, res: Response) => {
   }
 };
 
+//================================== POST REQUESTS (create) ==========================
+/**
+ * Add new seller to database
+ * @param req
+ * @param res
+ * @returns
+ */
+export const addSeller = async (req: Request, res: Response) => {
+  try {
+    const newSeller = req.query;
+    if (!isSeller(newSeller)) {
+      res.status(400).json({ message: `missing parameters from seller` });
+      return;
+    }
+    addSellerToDB(newSeller as unknown as ISellerProperties);
+    res.status(200).json({ message: `success ading seller` });
+  } catch (error) {
+    res.status(500).json({ message: `error adding new seller` });
+    console.log(error);
+  }
+};
+
+// ================================ PUT REQUESTS (edit) ===========================
 /**
  * Request to edit seller given id
  * @param req
@@ -47,27 +73,7 @@ export const editSeller = async (req: Request, res: Response) => {
   }
 };
 
-/**
- * Add new seller to database
- * @param req
- * @param res
- * @returns
- */
-export const addSeller = async (req: Request, res: Response) => {
-  try {
-    const newSeller = req.query;
-    if (!isSeller(newSeller)) {
-      res.status(400).json({ message: `missing parameters from seller` });
-      return;
-    }
-    addSellerToDB(newSeller as unknown as ISellerProperties);
-    res.status(200).json({ message: `success ading seller` });
-  } catch (error) {
-    res.status(500).json({ message: `error adding new seller` });
-    console.log(error);
-  }
-};
-
+// ================================ DELETE REQUESTS ===========================
 /**
  * Request to delete a seller and their shares
  * @param req

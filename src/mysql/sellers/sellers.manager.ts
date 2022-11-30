@@ -13,8 +13,8 @@ import { ShareBundle } from "../../objects/ShareBundle";
 import { getCompaniesListFromDB } from "../companies/companies.manager";
 
 /**
- *
- * @returns list of all companies from database
+ * Get list of sellers and their share bundles
+ * @returns {seller : Seller[], shareBundle : shareBundle[]} object with all sellers and all share bundles
  */
 export const getSellersListFromDB = async () => {
   const sellersList = await getListOfTableEntries(Seller.name);
@@ -34,15 +34,6 @@ export const getSellersListFromDB = async () => {
 };
 
 /**
- * edit seller's information (just name, no bundles)
- * @param newSeller
- * @returns
- */
-export const editSellerInDB = async (newSeller: ISellerProperties) => {
-  return await updateElement(new Seller(newSeller));
-};
-
-/**
  * Add new seller to database
  * @param seller
  */
@@ -59,6 +50,15 @@ export const addSellerToDB = async (seller: ISellerProperties) => {
     });
     await insertElement(emptyBundle);
   }
+};
+
+/**
+ * edit seller's information (just name, no bundles)
+ * @param newSeller
+ * @returns
+ */
+export const editSellerInDB = async (newSeller: ISellerProperties) => {
+  return await updateElement(new Seller(newSeller));
 };
 
 /**
