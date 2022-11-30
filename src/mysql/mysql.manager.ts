@@ -29,6 +29,7 @@ import playerCompanyFixture from "../fixtures/playerCompany";
 import sellers from "../fixtures/sellers";
 import shareBundlesFixture from "../fixtures/shareBundles";
 import { PlayerShareBundle } from "../objects/PlayerShareBundle";
+import { getCompaniesListFromDB } from "./companies/companies.manager";
 
 /**
  * seed database with:
@@ -124,7 +125,7 @@ export const resetDB = async () => {
   const playerCompany = new PlayerCompany(playerCompanyFixture);
   await updateElement(playerCompany);
 
-  const companiesArray = await getAllCompanies();
+  const companiesArray = await getCompaniesListFromDB();
   //loop through fixtures and add to database
   for (const company of companiesArray) {
     //@ts-ignore
@@ -239,66 +240,6 @@ export const addToTimerInSeconds = async (seconds: number) => {
   }
 };
 
-/**
- *
- * @returns list of all companies from database
- */
-export const getAllCompanies = async () => {
-  const companiesList = await getListOfTableEntries(Company.name);
-  let allCompaniesList: Company[] = [];
-  //convert database objects into company objects
-  for (const element of companiesList) {
-    const newCompany = new Company(element as ICompanyProperties);
-    allCompaniesList.push(newCompany);
-  }
-  return allCompaniesList;
-};
-
-/**
- * Get information for just one company
- * @param companyId id of company you wish to retreive info for
- * @returns company object
- */
-export const getCompanyInformation = async (companyId: string) => {
-  return await getElementById(companyId, Company.name);
-};
-
-export const addCompanyToDatabase = async (company: ICompanyProperties) => {
-  await insertElement(new Company(company));
-};
-
-/**
- * Get information for player company
- * @returns player company object
- */
-export const getPlayerCompanyInformation = async () => {
-  return await getFirstTableElement(PlayerCompany.name);
-};
-
-/**
- * Update company info
- * @param newCompany
- * @returns
- */
-export const editCompanyInformation = async (
-  newCompany: ICompanyProperties
-) => {
-  return await updateElement(new Company(newCompany));
-};
-
-/**
- * Delete a company with given id from the database and all sharebundles associated with it
- * @param id
- * @returns
- */
-export const deleteCompanyFromDatabase = async (id: string) => {
-  await deleteElementById(id, Company.name);
-  const allSellers = await getAllSellers();
-  for (const seller of allSellers.sellers) {
-    const shareBundleId = seller.id * (id as unknown as number);
-    deleteElementById(shareBundleId as unknown as string, ShareBundle.name);
-  }
-};
 
 /**
  *
@@ -333,7 +274,7 @@ export const editSellerInformation = async (newSeller: ISellerProperties) => {
 export const addSellerToDatabase = async (seller: ISellerProperties) => {
   const newSeller = new Seller(seller);
   await insertElement(newSeller);
-  const allCompanies = await getAllCompanies();
+  const allCompanies = await getCompaniesListFromDB();
   for (const company of allCompanies) {
     const emptyBundle = new ShareBundle({
       ownerId: newSeller.id,
@@ -363,7 +304,7 @@ export const editShareBundleInformation = async (
  */
 export const deleteSellerFromDatabase = async (sellerId: string) => {
   await deleteElementById(sellerId, Seller.name);
-  const companies = await getAllCompanies();
+  const companies = await getCompaniesListFromDB();
   for (const company of companies) {
     const shareBundleId = (sellerId as unknown as number) * company.id;
     await deleteElementById(
@@ -371,13 +312,6 @@ export const deleteSellerFromDatabase = async (sellerId: string) => {
       ShareBundle.name
     );
   }
-};
-
-export const editPlayerCompanyInformation = async (
-  playerCompany: IPlayerCompanyProperties
-) => {
-  const newCompany = new PlayerCompany(playerCompany);
-  return await updateElement(newCompany);
 };
 
 export const sellShareBundle = async (

@@ -1,9 +1,9 @@
 import config from "../config/config.index";
 import {
   addToTimerInSeconds,
-  getAllCompanies,
   getShowStatus,
 } from "../mysql/mysql.manager";
+import { getCompaniesListFromDB } from "../mysql/companies/companies.manager";
 import { updateElement } from "../mysql/mysql.wrapper";
 import { Company } from "../objects/Company";
 
@@ -15,13 +15,10 @@ import { Company } from "../objects/Company";
 export const startUpdates = async () => {
   try {
     //get companies list from database
-    const allCompaniesList = await getAllCompanies();
+    const allCompaniesList = await getCompaniesListFromDB();
     //set the interval for every second and store it in global variable
     return setInterval(async () => {
-      //console.log('========================= A SECOND HAS PASSED ============================')
-      //console.log('============================= UPDATING TIME ==============================')
       await updateTimer();
-      //console.log('========================= UPDATING COMPANIES =============================')
       for (const company of allCompaniesList) {
         updatePrice(company);
       }
