@@ -18,15 +18,12 @@ import { ShareBundle } from "../../objects/ShareBundle";
 //config and fixtures
 import { PlayerShareBundle } from "../../objects/PlayerShareBundle";
 
-
 /**
  * edit share bundles information
  * @param newShareBundle
  * @returns
  */
-export const editShareBundleInDB = async (
-  newShareBundle: IShareBundle
-) => {
+export const editShareBundleInDB = async (newShareBundle: IShareBundle) => {
   const newObject = new ShareBundle(newShareBundle);
   return await updateElement(newObject);
 };
@@ -56,7 +53,10 @@ export const sellSharesInDB = async (
   const databaseCompany = await getElementById(String(companyId), Company.name);
   const company = new Company(databaseCompany as ICompanyProperties);
 
-  playerCompany.liquidAssets += quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
+  if (company.name != "Rune")
+    playerCompany.liquidAssets +=
+      quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
+  else playerCompany.liquidAssets -= quantity * priceAtSale;
   //update ownership of bundles
   sellerShareBundle.quantity -= quantity;
 
@@ -130,7 +130,11 @@ export const buySharesInDB = async (
   const databaseCompany = await getElementById(String(companyId), Company.name);
   const company = new Company(databaseCompany as ICompanyProperties);
 
-  playerCompany.liquidAssets -= quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
+  //update liquid assets depending on wether we are doing transaction with player company or not
+  if (company.name != "Rune")
+    playerCompany.liquidAssets -=
+      quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
+  else playerCompany.liquidAssets += quantity * priceAtSale;
   //update ownership of bundles
   sellerShareBundle.quantity += quantity;
 
@@ -189,4 +193,4 @@ export const getPlayerBundlesListFromDB = async () => {
     allBundlesList.push(newBundle);
   }
   return allBundlesList;
-}; 
+};
