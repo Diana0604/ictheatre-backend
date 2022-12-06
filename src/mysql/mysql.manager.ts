@@ -143,9 +143,10 @@ export const resetDB = async () => {
 
   const { shareBundles } = await getSellersListFromDB();
   for (const shareBundle of shareBundles) {
-    shareBundle.quantity = shareBundle.initialQuantity;
-    console.log("update sellers");
-    updateElement(shareBundle);
+    const newShareBundle = new ShareBundle(shareBundle)
+    newShareBundle.quantity = shareBundle.initialQuantity;
+   //console.log("update sellers");
+    updateElement(newShareBundle);
   }
 
   console.log("database reset");
