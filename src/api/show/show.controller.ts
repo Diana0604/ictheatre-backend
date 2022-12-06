@@ -2,8 +2,7 @@ import { Request, Response } from 'express'
 import { setShowPaused, setShowStarted } from '../../mysql/mysql.manager'
 import { startUpdates } from '../../functions/showUpdates'
 
-let updateInterval: NodeJS.Timer
-
+let intervals: {updateSharesInterval: NodeJS.Timer, updateTimeInterval: NodeJS.Timer}
 /**
  * play show from current point
  */
@@ -18,7 +17,7 @@ export const playShow = async (_req: Request, res: Response) => {
     }
 
     try {
-        updateInterval = await startUpdates()
+        intervals = await startUpdates()
     } catch (error) {
         console.log('could not load list of companies for current show')
         console.log(error)
@@ -32,7 +31,8 @@ export const playShow = async (_req: Request, res: Response) => {
  * pause show from current point
  */
 export const pauseShow = async (_req: Request, res: Response) => {
-    clearInterval(updateInterval)
+    clearInterval(intervals.updateSharesInterval)
+    clearInterval(intervals.updateTimeInterval)
     try {
         await setShowPaused()
     } catch (error) {

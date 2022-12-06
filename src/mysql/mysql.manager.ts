@@ -108,7 +108,7 @@ export const seedDB = async () => {
 export const resetDB = async () => {
   //await cleanDB();
   //setup show status
-  const showStatus = await getShowStatus();
+  const showStatus = await getShowStatusFromDB();
   showStatus.timeSinceStartup = 0;
   console.log("update show status");
   await updateElement(showStatus);
@@ -163,7 +163,7 @@ export const resetDB = async () => {
  * Get show status from database
  * @returns show status as object
  */
-export const getShowStatus = async () => {
+export const getShowStatusFromDB = async () => {
   try {
     const showStatus = await getFirstTableElement(ShowStatus.name);
     if (!showStatus) {
@@ -206,7 +206,7 @@ const showAllTables = async () => {
  */
 export const setShowStarted = async () => {
   try {
-    const showStatus = await getShowStatus();
+    const showStatus = await getShowStatusFromDB();
     showStatus.isPlaying = true;
     await updateElement(showStatus);
   } catch (error) {
@@ -219,7 +219,7 @@ export const setShowStarted = async () => {
  */
 export const setShowPaused = async () => {
   try {
-    const showStatus = await getShowStatus();
+    const showStatus = await getShowStatusFromDB();
     showStatus.isPlaying = false;
     await updateElement(showStatus);
   } catch (error) {
@@ -232,7 +232,7 @@ export const setShowPaused = async () => {
  */
 export const addToTimerInSeconds = async (seconds: number) => {
   try {
-    let showStatus = await getShowStatus();
+    let showStatus = await getShowStatusFromDB();
     showStatus.timeSinceStartup = showStatus.timeSinceStartup + seconds;
     await updateElement(showStatus);
   } catch (error) {

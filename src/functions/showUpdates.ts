@@ -1,7 +1,6 @@
 import config from "../config/config.index";
 import {
   addToTimerInSeconds,
-  getShowStatus,
 } from "../mysql/mysql.manager";
 import { getCompaniesListFromDB } from "../mysql/companies/companies.manager";
 import { updateElement } from "../mysql/mysql.wrapper";
@@ -17,12 +16,17 @@ export const startUpdates = async () => {
     //get companies list from database
     const allCompaniesList = await getCompaniesListFromDB();
     //set the interval for every second and store it in global variable
-    return setInterval(async () => {
-      await updateTimer();
+    const updateSharesInterval = setInterval(async () => {
       for (const company of allCompaniesList) {
         updatePrice(company);
       }
-    }, config.showConfig.updateIntervalInSeconds * 1000);
+    }, config.showConfig.updateSharesInSeconds * 1000);
+
+    const updateTimeInterval = setInterval(async () => {
+      await updateTimer();
+    }, config.showConfig.updateTimerInSeconds * 1000);
+
+    return { updateSharesInterval, updateTimeInterval };
   } catch (error) {
     throw error;
   }
@@ -32,7 +36,7 @@ export const startUpdates = async () => {
  * Update timer in database
  */
 const updateTimer = async () => {
-  await addToTimerInSeconds(config.showConfig.updateIntervalInSeconds);
+  await addToTimerInSeconds(config.showConfig.updateTimerInSeconds);
 };
 
 /**

@@ -87,6 +87,7 @@ export const insertElement = async (obj: any) => {
  */
 export const updateElement = async (obj: any) => {
     const updateCommand = updateElementCommand(obj)
+    //console.log(updateCommand)
     try {
         await execute(updateCommand)
     } catch (error) {

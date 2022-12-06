@@ -1,7 +1,7 @@
 //types
 import { Request, Response } from "express";
 import {
-  getShowStatus,
+  getShowStatusFromDB,
   resetDB,
 } from "../../mysql/mysql.manager";
 
@@ -13,7 +13,7 @@ import {
  */
 export const restartDB = async (_req: Request, res: Response) => {
   try {
-    const showStatus = await getShowStatus();
+    const showStatus = await getShowStatusFromDB();
     if (showStatus.isPlaying) {
       res
         .status(401)
@@ -24,6 +24,19 @@ export const restartDB = async (_req: Request, res: Response) => {
     //seed database
     await resetDB();
     res.status(200).json({ message: "database seeded" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "error restarting database - check server logs" });
+    console.log("error creating database");
+    console.log(error);
+  }
+};
+
+export const getShowStatus = async (_req: Request, res: Response) => {
+  try {
+    const showStatus = await getShowStatusFromDB();
+    res.status(200).json(showStatus);
   } catch (error) {
     res
       .status(500)
