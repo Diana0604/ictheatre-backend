@@ -41,7 +41,6 @@ export const seedDB = async () => {
   //setup player company
   const playerCompany = new PlayerCompany(playerCompanyFixture);
   await insertElement(playerCompany);
-
   const companiesArray = [];
   //loop through fixtures and add to database
   for (const company of companies) {
@@ -127,7 +126,6 @@ export const resetDB = async () => {
     //@ts-ignore
     const newCompany = new Company(company);
     newCompany.currentPricePerShare = company.initPricePerShare;
-    console.log("update new company");
     await updateElement(newCompany);
     //reset player bundles
     const newPlayerBundle = new PlayerShareBundle({
@@ -135,17 +133,14 @@ export const resetDB = async () => {
       companyName: newCompany.name,
       quantity: 0,
     });
-    console.log("update bundle");
     await updateElement(newPlayerBundle);
   }
 
   //share bundles -> reset quantity to initial quantity
-
   const { shareBundles } = await getSellersListFromDB();
   for (const shareBundle of shareBundles) {
     const newShareBundle = new ShareBundle(shareBundle)
     newShareBundle.quantity = shareBundle.initialQuantity;
-   //console.log("update sellers");
     updateElement(newShareBundle);
   }
 

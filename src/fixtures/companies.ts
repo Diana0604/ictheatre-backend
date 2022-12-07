@@ -8,7 +8,7 @@ export default [
     id: 230,
   },
   {
-    name: "Rune",
+    name: "Rune Trading Ltd.",
     description: "Audience company.",
     initPricePerShare: 141.92,
     id: 299,
@@ -260,7 +260,7 @@ export default [
     initPricePerShare: 101.21,
     tendency: 0,
     //finalPricePerShare: 189.71,
-    id: 230,
+    id: 232,
   },
   {
     name: "Bombit Korporatsiya",

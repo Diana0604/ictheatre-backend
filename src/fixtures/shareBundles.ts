@@ -100,6 +100,8 @@ export default [
   { ownerId: 157, companyId: 230, quantity:  510600, companyName: "Liberty Munitions" },
   { ownerId: 158, companyId: 231, quantity:  147200, companyName: "Bombit Korporatsiya" },
   { ownerId: 159, companyId: 231, quantity:  443600, companyName: "Bombit Korporatsiya" },
+  { ownerId: 160, companyId: 231, quantity:  600750, companyName: "Bombit Korporatsiya" },
+  { ownerId: 161, companyId: 299, quantity:  56000, companyName: "Rune Trading Ltd." },
 ];
 /**
  * Fannie Mae - 211

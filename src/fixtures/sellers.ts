@@ -239,4 +239,12 @@ export default [
     id: 154,
     name: "Whitney Pike",
   },
+  {
+    id: 160,
+    name: "Katrina Bond",
+  },
+  {
+    id: 161,
+    name: "George Kingston",
+  },
 ];
