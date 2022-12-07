@@ -96,6 +96,10 @@ export default [
   { ownerId: 153, companyId: 220, quantity:  5820, companyName: "Ameritech" },
   { ownerId: 154, companyId: 209, quantity:  70746, companyName: "Motorola" },
   { ownerId: 155, companyId: 217, quantity:  300, companyName: "Google" },
+  { ownerId: 156, companyId: 230, quantity:  278000, companyName: "Liberty Munitions" },
+  { ownerId: 157, companyId: 230, quantity:  510600, companyName: "Liberty Munitions" },
+  { ownerId: 158, companyId: 231, quantity:  147200, companyName: "Bombit Korporatsiya" },
+  { ownerId: 159, companyId: 231, quantity:  443600, companyName: "Bombit Korporatsiya" },
 ];
 /**
  * Fannie Mae - 211

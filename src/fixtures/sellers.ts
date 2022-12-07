@@ -8,6 +8,10 @@ export default [
     name: "Alice Nicholson",
   },
   {
+    id: 158,
+    name: "Amanda Virgie",
+  },
+  {
     id: 101,
     name: "Angelica Astrom",
   },
@@ -70,6 +74,10 @@ export default [
   {
     id: 116,
     name: "Erol Muanza",
+  },
+  {
+    id: 156,
+    name: "Gavin Da amire",
   },
   {
     id: 117,
@@ -190,6 +198,14 @@ export default [
   {
     id: 146,
     name: "Rebbecca Smart",
+  },
+  {
+    id: 159,
+    name: "Rosie Helms",
+  },
+  {
+    id: 157,
+    name: "Sally John",
   },
   {
     id: 147,

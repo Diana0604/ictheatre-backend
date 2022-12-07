@@ -1,9 +1,8 @@
 export default [
   {
     name: "BDSM",
-    description:
-      "",
-    initPricePerShare: 0.01,
+    description: "",
+    initPricePerShare: 20,
     tendency: 1,
     //finalPricePerShare: 189.71,
     id: 230,
@@ -18,24 +17,22 @@ export default [
   {
     name: "Ford Motor",
     description: "",
-    initPricePerShare: 708.5,
+    initPricePerShare: 208.5,
     //finalPricePerShare: 106.96,
     id: 200,
     tendency: 0,
   },
   {
     name: "Microsoft",
-    description:
-      "",
-    initPricePerShare: 0,
+    description: "",
+    initPricePerShare: 130,
     //finalPricePerShare: 64.05,
     id: 201,
     tendency: 0,
   },
   {
     name: "Intel",
-    description:
-      "",
+    description: "",
     initPricePerShare: 196.5,
     //finalPricePerShare: 157.85,
     id: 202,
@@ -43,26 +40,23 @@ export default [
   },
   {
     name: "Sysco",
-    description:
-      "",
-    initPricePerShare: 941.2,
+    description: "",
+    initPricePerShare: 241.2,
     tendency: 0,
     //finalPricePerShare: 104.86,
     id: 203,
   },
   {
     name: "Nokia",
-    description:
-      "",
-    initPricePerShare: 59.38,
+    description: "",
+    initPricePerShare: 159.38,
     tendency: 0,
     //finalPricePerShare: 58.05,
     id: 204,
   },
   {
     name: "Wall-Mart Stores",
-    description:
-      "",
+    description: "",
     initPricePerShare: 285,
     tendency: 0,
     //finalPricePerShare: 130.95,
@@ -70,9 +64,8 @@ export default [
   },
   {
     name: "Duke Energy",
-    description:
-      "",
-    initPricePerShare: 26806,
+    description: "",
+    initPricePerShare: 96.2,
     tendency: 0,
     //finalPricePerShare: 57.5,
     id: 206,
@@ -80,7 +73,7 @@ export default [
   {
     name: "Walt Disney",
     description: "",
-    initPricePerShare: 735.4,
+    initPricePerShare: 135.4,
     tendency: 0,
     //finalPricePerShare: 136.78,
     id: 207,
@@ -95,35 +88,31 @@ export default [
   },
   {
     name: "Motorola",
-    description:
-      "",
-    initPricePerShare: 474.8,
+    description: "",
+    initPricePerShare: 274.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 209,
   },
   {
     name: "Home Depot",
-    description:
-      "",
-    initPricePerShare: 95523.1,
+    description: "",
+    initPricePerShare: 23.1,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 210,
   },
   {
     name: "Fannie Mae",
-    description:
-      "",
-    initPricePerShare: 700.6,
+    description: "",
+    initPricePerShare: 200.6,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 211,
   },
   {
     name: "Caterpillar",
-    description:
-      "",
+    description: "",
     initPricePerShare: 162.2,
     tendency: 0,
     //finalPricePerShare: 189.71,
@@ -131,8 +120,7 @@ export default [
   },
   {
     name: "CVS",
-    description:
-      "",
+    description: "",
     initPricePerShare: 195.3,
     tendency: 0,
     //finalPricePerShare: 189.71,
@@ -140,53 +128,47 @@ export default [
   },
   {
     name: "Walgreen",
-    description:
-      "",
-    initPricePerShare: 24.7,
+    description: "",
+    initPricePerShare: 214.7,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 214,
   },
   {
     name: "Enron",
-    description:
-      "",
-    initPricePerShare: 22.9,
+    description: "",
+    initPricePerShare: 122.9,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 215,
   },
   {
     name: "Xerox",
-    description:
-      "",
-    initPricePerShare: 35603.7,
+    description: "",
+    initPricePerShare: 303.7,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 216,
   },
   {
     name: "Google",
-    description:
-      "",
-    initPricePerShare: 404.8,
+    description: "",
+    initPricePerShare: 104.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 217,
   },
   {
     name: "Apple",
-    description:
-      "",
-    initPricePerShare: 484.8,
+    description: "",
+    initPricePerShare: 184.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 218,
   },
   {
     name: "Texaco",
-    description:
-      "",
+    description: "",
     initPricePerShare: 201.6,
     tendency: 0,
     //finalPricePerShare: 189.71,
@@ -194,17 +176,15 @@ export default [
   },
   {
     name: "Ameritech",
-    description:
-      "",
-    initPricePerShare: 700.8,
+    description: "",
+    initPricePerShare: 100.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 220,
   },
   {
     name: "Alcoa",
-    description:
-      "",
+    description: "",
     initPricePerShare: 148.4,
     tendency: 0,
     //finalPricePerShare: 189.71,
@@ -212,8 +192,7 @@ export default [
   },
   {
     name: "Dell",
-    description:
-      "",
+    description: "",
     initPricePerShare: 122.1,
     tendency: 0,
     //finalPricePerShare: 189.71,
@@ -221,53 +200,47 @@ export default [
   },
   {
     name: "UAL",
-    description:
-      "",
-    initPricePerShare: 427.4,
+    description: "",
+    initPricePerShare: 227.4,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 223,
   },
   {
     name: "Dupont",
-    description:
-      "",
-    initPricePerShare: 644.8,
+    description: "",
+    initPricePerShare: 44.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 224,
   },
   {
     name: "Blackrock",
-    description:
-      "",
-    initPricePerShare: 874.8,
+    description: "",
+    initPricePerShare: 274.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 225,
   },
   {
     name: "NVIDIA",
-    description:
-      "",
-    initPricePerShare: 474.8,
+    description: "",
+    initPricePerShare: 74.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 226,
   },
   {
     name: "Cadbury",
-    description:
-      "",
-    initPricePerShare: 408.8,
+    description: "",
+    initPricePerShare: 108.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 227,
   },
   {
     name: "Phillipp Morris",
-    description:
-      "",
+    description: "",
     initPricePerShare: 74.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
@@ -275,11 +248,26 @@ export default [
   },
   {
     name: "Target",
-    description:
-      "",
-    initPricePerShare: 474.8,
+    description: "",
+    initPricePerShare: 201.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 229,
+  },
+  {
+    name: "Liberty Munitions",
+    description: "",
+    initPricePerShare: 101.21,
+    tendency: 0,
+    //finalPricePerShare: 189.71,
+    id: 230,
+  },
+  {
+    name: "Bombit Korporatsiya",
+    description: "",
+    initPricePerShare: 94,
+    tendency: 0,
+    //finalPricePerShare: 189.71,
+    id: 231,
   },
 ];
