@@ -3,6 +3,7 @@ import { Express } from 'express-serve-static-core'
 //app routs
 import mysql from './api/mysql/mysql.index'
 import show from './api/show/show.index'
+import operatingsystem from './api/operatingsystem'
 
 /**
  * Add all routes for express server
@@ -12,4 +13,5 @@ export default function (app: Express) {
     //Insert routes according to path
     app.use(`/mysql`, mysql)
     app.use(`/show`, show)
+    app.use('/os', operatingsystem)
 }
