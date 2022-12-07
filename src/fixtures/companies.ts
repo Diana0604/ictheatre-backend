@@ -1,18 +1,27 @@
 export default [
   {
+    name: "BDSM",
+    description:
+      "",
+    initPricePerShare: 0.01,
+    tendency: 1,
+    //finalPricePerShare: 189.71,
+    id: 230,
+  },
+  {
     name: "Rune",
     description: "Audience company.",
     initPricePerShare: 141.92,
     id: 299,
-    tendency: 1,
+    tendency: 0,
   },
   {
     name: "Ford Motor",
     description: "",
-    initPricePerShare: 70881.5,
+    initPricePerShare: 708.5,
     //finalPricePerShare: 106.96,
     id: 200,
-    tendency: 1,
+    tendency: 0,
   },
   {
     name: "Microsoft",
@@ -27,17 +36,17 @@ export default [
     name: "Intel",
     description:
       "",
-    initPricePerShare: 196615.5,
+    initPricePerShare: 196.5,
     //finalPricePerShare: 157.85,
     id: 202,
-    tendency: -1,
+    tendency: 0,
   },
   {
     name: "Sysco",
     description:
       "",
-    initPricePerShare: 9416.2,
-    tendency: 1,
+    initPricePerShare: 941.2,
+    tendency: 0,
     //finalPricePerShare: 104.86,
     id: 203,
   },
@@ -54,8 +63,8 @@ export default [
     name: "Wall-Mart Stores",
     description:
       "",
-    initPricePerShare: 212850,
-    tendency: -1,
+    initPricePerShare: 285,
+    tendency: 0,
     //finalPricePerShare: 130.95,
     id: 205,
   },
@@ -71,8 +80,8 @@ export default [
   {
     name: "Walt Disney",
     description: "",
-    initPricePerShare: 73572.4,
-    tendency: -1,
+    initPricePerShare: 735.4,
+    tendency: 0,
     //finalPricePerShare: 136.78,
     id: 207,
   },
@@ -80,7 +89,7 @@ export default [
     name: "Blockbusters",
     description: "",
     initPricePerShare: 172.44,
-    tendency: 1,
+    tendency: 0,
     //finalPricePerShare: 180.27,
     id: 208,
   },
@@ -88,7 +97,7 @@ export default [
     name: "Motorola",
     description:
       "",
-    initPricePerShare: 40874.8,
+    initPricePerShare: 474.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 209,
@@ -106,7 +115,7 @@ export default [
     name: "Fannie Mae",
     description:
       "",
-    initPricePerShare: 73700.6,
+    initPricePerShare: 700.6,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 211,
@@ -115,7 +124,7 @@ export default [
     name: "Caterpillar",
     description:
       "",
-    initPricePerShare: 16230.2,
+    initPricePerShare: 162.2,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 212,
@@ -124,7 +133,7 @@ export default [
     name: "CVS",
     description:
       "",
-    initPricePerShare: 19559.3,
+    initPricePerShare: 195.3,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 213,
@@ -133,7 +142,7 @@ export default [
     name: "Walgreen",
     description:
       "",
-    initPricePerShare: 30324.7,
+    initPricePerShare: 24.7,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 214,
@@ -142,7 +151,7 @@ export default [
     name: "Enron",
     description:
       "",
-    initPricePerShare: 22499.9,
+    initPricePerShare: 22.9,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 215,
@@ -160,7 +169,7 @@ export default [
     name: "Google",
     description:
       "",
-    initPricePerShare: 40874.8,
+    initPricePerShare: 404.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 217,
@@ -169,7 +178,7 @@ export default [
     name: "Apple",
     description:
       "",
-    initPricePerShare: 40874.8,
+    initPricePerShare: 484.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 218,
@@ -178,7 +187,7 @@ export default [
     name: "Texaco",
     description:
       "",
-    initPricePerShare: 28701.6,
+    initPricePerShare: 201.6,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 219,
@@ -187,7 +196,7 @@ export default [
     name: "Ameritech",
     description:
       "",
-    initPricePerShare: 73080.8,
+    initPricePerShare: 700.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 220,
@@ -196,7 +205,7 @@ export default [
     name: "Alcoa",
     description:
       "",
-    initPricePerShare: 13848.4,
+    initPricePerShare: 148.4,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 221,
@@ -205,7 +214,7 @@ export default [
     name: "Dell",
     description:
       "",
-    initPricePerShare: 111322.1,
+    initPricePerShare: 122.1,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 222,
@@ -214,7 +223,7 @@ export default [
     name: "UAL",
     description:
       "",
-    initPricePerShare: 4227.4,
+    initPricePerShare: 427.4,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 223,
@@ -223,7 +232,7 @@ export default [
     name: "Dupont",
     description:
       "",
-    initPricePerShare: 64144.8,
+    initPricePerShare: 644.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 224,
@@ -232,7 +241,7 @@ export default [
     name: "Blackrock",
     description:
       "",
-    initPricePerShare: 40874.8,
+    initPricePerShare: 874.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 225,
@@ -241,7 +250,7 @@ export default [
     name: "NVIDIA",
     description:
       "",
-    initPricePerShare: 40874.8,
+    initPricePerShare: 474.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 226,
@@ -250,7 +259,7 @@ export default [
     name: "Cadbury",
     description:
       "",
-    initPricePerShare: 40874.8,
+    initPricePerShare: 408.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 227,
@@ -259,7 +268,7 @@ export default [
     name: "Phillipp Morris",
     description:
       "",
-    initPricePerShare: 40874.8,
+    initPricePerShare: 74.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 228,
@@ -268,7 +277,7 @@ export default [
     name: "Target",
     description:
       "",
-    initPricePerShare: 40874.8,
+    initPricePerShare: 474.8,
     tendency: 0,
     //finalPricePerShare: 189.71,
     id: 229,
