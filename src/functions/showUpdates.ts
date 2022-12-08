@@ -48,7 +48,7 @@ const updatePrice = async (company: Company) => {
     if (secsSinceStartup < 2399) {
       const linearPrice =
         company.currentPricePerShare +
-        (200 - company.currentPricePerShare) / (2400 - secsSinceStartup);
+        (200 - company.currentPricePerShare) / (24 - secsSinceStartup / 60);
       company.currentPricePerShare = linearPrice;
       await updateElement(company);
       return;
