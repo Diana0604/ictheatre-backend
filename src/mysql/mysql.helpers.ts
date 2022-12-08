@@ -196,6 +196,10 @@ export const selectByIdCommand = (id: string, table: string) => {
   return `SELECT * FROM ${table} WHERE id=${id};`;
 };
 
+export const selectByKeyValuePairCommand = (keyValuePair : {key: string, value: string}, table: string) => {
+  return `SELECT * FROM ${table} WHERE ${keyValuePair.key}=${keyValuePair.value};`
+}
+
 /**
  * Delete company given an id
  * @param id

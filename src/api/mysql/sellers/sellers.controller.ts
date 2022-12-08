@@ -9,6 +9,7 @@ import {
   editSellerInDB,
   addSellerToDB,
   deleteSellerFromDB,
+  getSellerBundlesFromDB,
 } from "../../../mysql/sellers/sellers.manager";
 
 //================================== GET REQUESTS ==============================
@@ -24,6 +25,15 @@ export const getSellersList = async (_req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ message: `error getting sellers list` });
     console.log(error);
+  }
+};
+
+export const getSellerBundles = async (req: Request, res: Response) => {
+  try {
+    const sellerBundles = await getSellerBundlesFromDB(req.params.id);
+    res.status(200).json(sellerBundles);
+  } catch (error) {
+    res.status(500).json({ message: `error getting bundles for given seller` });
   }
 };
 

@@ -4,6 +4,7 @@ import {
   getListOfTableEntries,
   updateElement,
   deleteElementById,
+  getElementsByValuePair,
 } from "../mysql.wrapper";
 //classes
 import { ISellerProperties } from "../../types/types.objects";
@@ -66,4 +67,8 @@ export const deleteSellerFromDB = async (sellerId: string) => {
       ShareBundle.name
     );
   }
+};
+
+export const getSellerBundlesFromDB = async (sellerId: string ) => {
+  return await getElementsByValuePair({key: 'ownerId', value: sellerId}, ShareBundle.name);
 };
