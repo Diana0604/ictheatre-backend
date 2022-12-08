@@ -5,7 +5,7 @@ import {
 import { getCompaniesListFromDB } from "../mysql/companies/companies.manager";
 import { updateElement } from "../mysql/mysql.wrapper";
 import { Company } from "../objects/Company";
-
+import { getShowStatusFromDB } from "../mysql/mysql.manager";
 /**
  * set an interval to update:
  * 1. Timer
@@ -45,6 +45,12 @@ const updateTimer = async () => {
  */
 const updatePrice = async (company: Company) => {
   company.currentPricePerShare;
+  if(company.name === "BDSM") {
+    const secsSinceStartup = (await getShowStatusFromDB()).timeSinceStartup
+    if(secsSinceStartup < 2399) {
+      const linearPrice = company.currentPricePerShare + (200-company.currentPricePerShare)/(2400 - secsSinceStartup)
+    }
+  }
   //const secsSinceStartup = (await getShowStatus()).timeSinceStartup
   //const linearPrice = (company.finalPricePerShare - company.initPricePerShare) / config.showConfig.lengthInSeconds * secsSinceStartup + company.initPricePerShare
   //company.currentPricePerShare = linearPrice
