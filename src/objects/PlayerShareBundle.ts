@@ -9,11 +9,13 @@ export class PlayerShareBundle extends DatabaseObject {
   companyId: number; //company for which these shares are
   companyName: string;
   quantity: number; //quantity of shares
+  boughtAt: number;
 
   constructor(props: IPlayerShareBundle) {
     super(props.companyId);
     this.companyId = props.companyId;
     this.quantity = props.quantity;
     this.companyName = props.companyName;
+    this.boughtAt = props.boughtAt;
   }
 }

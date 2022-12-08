@@ -110,7 +110,7 @@ export const buyShares = async (req: Request, res: Response) => {
       });
       return;
     }
-
+    query.boughtAt = query.priceAtSale;
     if (!isExistingShareBundle(query)) {
       res.status(400).json({ message: `missing bundle information` });
       return;

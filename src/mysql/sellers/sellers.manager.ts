@@ -39,6 +39,7 @@ export const addSellerToDB = async (seller: ISellerProperties) => {
       companyId: company.id,
       quantity: 0,
       companyName: company.name,
+      boughtAt: 0
     });
     await insertElement(emptyBundle);
   }

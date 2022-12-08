@@ -52,6 +52,7 @@ export type IShareBundle = {
   quantity: number;
   companyName: string;
   initialQuantity?: number;
+  boughtAt: number;
 };
 
 /**
@@ -61,4 +62,5 @@ export type IPlayerShareBundle = {
   companyId: number;
   quantity: number;
   companyName: string;
+  boughtAt: number;
 }

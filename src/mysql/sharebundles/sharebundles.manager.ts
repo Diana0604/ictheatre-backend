@@ -54,8 +54,8 @@ export const sellSharesInDB = async (
   const company = new Company(databaseCompany as ICompanyProperties);
 
   if (company.name != "Rune")
-    playerCompany.liquidAssets +=
-      quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
+    playerCompany.liquidAssets += quantity * priceAtSale * (25 / 100);
+  //TODO - make percentage a variable
   else playerCompany.liquidAssets -= quantity * priceAtSale;
   //update ownership of bundles
   sellerShareBundle.quantity -= quantity;
@@ -132,11 +132,12 @@ export const buySharesInDB = async (
 
   //update liquid assets depending on wether we are doing transaction with player company or not
   if (company.name != "Rune")
-    playerCompany.liquidAssets -=
-      quantity * priceAtSale * (25 / 100); //TODO - make percentage a variable
+    playerCompany.liquidAssets -= quantity * priceAtSale * (25 / 100);
+  //TODO - make percentage a variable
   else playerCompany.liquidAssets += quantity * priceAtSale;
   //update ownership of bundles
   sellerShareBundle.quantity += quantity;
+  sellerShareBundle.boughtAt = priceAtSale;
 
   company.currentPricePerShare =
     company.currentPricePerShare * (1 - 0.0001) ** quantity;
@@ -174,6 +175,7 @@ export const buyPlayerSharesInDB = async (
   playerCompany.liquidAssets -= quantity * priceAtSale;
   //update ownership of bundles
   shareBundle.quantity += quantity;
+  shareBundle.boughtAt = priceAtSale
   //update company shares price
   company.currentPricePerShare =
     company.currentPricePerShare * (1 - 0.0001) ** quantity;

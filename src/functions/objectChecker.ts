@@ -80,6 +80,7 @@ export const isPlayerShareBundle = (potentialBundle : any) => {
   if (!potentialBundle.companyId) return false;
   if (!potentialBundle.quantity) return false;
   if (!potentialBundle.companyName) return false;
+  //if(!potentialBundle.boughtAt) return false;
   return true;
 }
 

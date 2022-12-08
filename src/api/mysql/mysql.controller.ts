@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import {
   getShowStatusFromDB,
   resetDB,
+  seedDB,
 } from "../../mysql/mysql.manager";
 
 /**
@@ -22,7 +23,7 @@ export const restartDB = async (_req: Request, res: Response) => {
     }
 
     //seed database
-    await resetDB();
+    await seedDB();
     res.status(200).json({ message: "database seeded" });
   } catch (error) {
     res

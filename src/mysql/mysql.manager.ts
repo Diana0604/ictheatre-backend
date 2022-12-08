@@ -53,6 +53,7 @@ export const seedDB = async () => {
       companyId: newCompany.id,
       companyName: newCompany.name,
       quantity: 0,
+      boughtAt: 0
     });
     await insertElement(newPlayerBundle);
   }
@@ -88,6 +89,7 @@ export const seedDB = async () => {
         companyId: company.id,
         quantity: 0,
         companyName: company.name,
+        boughtAt: 0
       });
       await insertElement(emptyBundle);
     }
@@ -132,11 +134,13 @@ export const resetDB = async () => {
       companyId: newCompany.id,
       companyName: newCompany.name,
       quantity: 0,
+      boughtAt: 0
     });
     await updateElement(newPlayerBundle);
   }
 
   //share bundles -> reset quantity to initial quantity
+  //const shareBun
   const { shareBundles } = await getSellersListFromDB();
   for (const shareBundle of shareBundles) {
     const newShareBundle = new ShareBundle(shareBundle)

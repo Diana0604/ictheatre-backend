@@ -11,6 +11,7 @@ export class ShareBundle extends DatabaseObject {
   companyName: string;
   quantity: number; //quantity of shares
   initialQuantity: number;
+  boughtAt: number;
 
   constructor(props: IShareBundle) {
     //bijective method between NxN->N to create ids
@@ -25,5 +26,6 @@ export class ShareBundle extends DatabaseObject {
     this.companyName = props.companyName;
     if (!props.initialQuantity) this.initialQuantity = props.quantity;
     else this.initialQuantity = props.initialQuantity;
+    this.boughtAt = props.boughtAt
   }
 }
