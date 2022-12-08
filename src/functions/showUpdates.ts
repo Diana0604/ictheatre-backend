@@ -1,7 +1,5 @@
 import config from "../config/config.index";
-import {
-  addToTimerInSeconds,
-} from "../mysql/mysql.manager";
+import { addToTimerInSeconds } from "../mysql/mysql.manager";
 import { getCompaniesListFromDB } from "../mysql/companies/companies.manager";
 import { updateElement } from "../mysql/mysql.wrapper";
 import { Company } from "../objects/Company";
@@ -45,10 +43,15 @@ const updateTimer = async () => {
  */
 const updatePrice = async (company: Company) => {
   company.currentPricePerShare;
-  if(company.name === "BDSM") {
-    const secsSinceStartup = (await getShowStatusFromDB()).timeSinceStartup
-    if(secsSinceStartup < 2399) {
-      const linearPrice = company.currentPricePerShare + (200-company.currentPricePerShare)/(2400 - secsSinceStartup)
+  if (company.name === "BDSM") {
+    const secsSinceStartup = (await getShowStatusFromDB()).timeSinceStartup;
+    if (secsSinceStartup < 2399) {
+      const linearPrice =
+        company.currentPricePerShare +
+        (200 - company.currentPricePerShare) / (2400 - secsSinceStartup);
+      company.currentPricePerShare = linearPrice;
+      await updateElement(company);
+      return;
     }
   }
   //const secsSinceStartup = (await getShowStatus()).timeSinceStartup
